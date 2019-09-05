@@ -27,6 +27,8 @@ class Rushhour:
         self.free_pos = None
 
     def init_positions(self, state: State):
+        """ true means empty... :/
+        """
         self.free_pos = np.ones((6, 6), dtype=bool)
         for car, p in zip(self.cars, state.pos):
             relative_pos = car.move_on_index
@@ -37,9 +39,21 @@ class Rushhour:
                     self.free_pos[i + p][relative_pos] -= 1
 
     def possible_moves(self, state):
+        def check_if_position_empty_and_valid(position):
+            return self.free_pos[position[0]][position[1]]
+
         self.init_positions(state)
         new_states = []
-        # TODO
+        # TODO next step
+        for i, car, p in zip(*enumerate(self.cars), state.pos):
+            space_in_font = (car.move_on_index, p + car.length) if car.is_horizontal \
+                else (p + car.length, car.move_on_index)
+            space_in_rear = (car.move_on_index, p - 1) if car.is_horizontal \
+                else (p - 1, car.move_on_index)
+            if check_if_position_empty_and_valid(space_in_font):
+                pass
+            if check_if_position_empty_and_valid(space_in_rear):
+                pass
         return new_states
 
     def solve(self, state):
