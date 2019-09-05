@@ -23,7 +23,11 @@ class State:
         self.d = d
         self.prev = previous_state
 
-        self.nb_moves = previous_state.nb_moves + 1
+        try:
+            self.nb_moves = previous_state.nb_moves + 1
+        except AttributeError:
+            self.nb_moves = 0
+
         self.h = 0
 
     """
@@ -37,16 +41,13 @@ class State:
         :param d: direction of the move [-1, 1]
         :return: State object
         """
-        # TODO
-        new_positions = self.pos[:]
+        new_positions = np.copy(self.pos)
         new_positions[c] += d
 
         return State(new_positions, c, d, self)
 
-
     def success(self):
         """ est il final? """
-        # TODO
         return self.pos[0] >= 4
 
     """
