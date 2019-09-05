@@ -5,6 +5,8 @@ from src.state import State
 
 class TestRushhour(TestCase):
     def test2(self):
+        """ move_on describe the position of the car, according to its orientation
+        """
         rh = Rushhour([True, True, False, False, True, True, False, False],
                       [2, 2, 3, 2, 3, 2, 3, 3],
                       [2, 0, 0, 0, 5, 4, 5, 3])

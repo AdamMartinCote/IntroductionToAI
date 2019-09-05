@@ -26,9 +26,18 @@ class State:
     Constructeur d'un état à partir mouvement (c,d)
     """
 
-    def move(self, c, d):
+    def move(self, c, d) -> State:
+        """
+
+        :param c: index of the car [0, 5]
+        :param d: direction of the move [-1, 1]
+        :return: State object
+        """
         # TODO
-        return None
+        new_positions = self.pos[:]
+        new_positions[c] += d
+        new_state = State(new_positions)
+        new_state.prev = self
 
     """ est il final? """
 
