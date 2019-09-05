@@ -4,9 +4,11 @@ from src.state import State
 
 
 class TestState(TestCase):
+    def setUp(self) -> None:
+        self.positioning = [1, 0, 1, 4, 2, 4, 0, 1]
+
     def test1(self):
-        positioning = [1, 0, 1, 4, 2, 4, 0, 1]
-        s0 = State(positioning)
+        s0 = State(self.positioning)
         b = not s0.success()
         print(b)
         s = s0.move(1, 1)
@@ -38,3 +40,4 @@ class TestState(TestCase):
         b = b and s.success()
         print("\n", "résultat correct" if b else "mauvais résultat")
 
+        self.assertTrue(b)
