@@ -1,15 +1,25 @@
 from collections import deque
+from typing import List
+
 import numpy as np
 import heapq
 
 
+class Car:
+    def __init__(self, is_horizontal: bool, length: int, move_on_index: int):
+        self.is_horizontal = is_horizontal
+        self.length = length
+        self.move_on_index = move_on_index
+
+
 class Rushhour:
 
-    def __init__(self, horiz, length, move_on, color=None):
+    def __init__(self, horiz: List[bool], lengths, move_on, color=None):
         self.nbcars = len(horiz)
-        self.horiz = horiz
-        self.length = length
-        self.move_on = move_on
+        self.cars = []
+        for orientation, length, move_on_index in horiz, lengths, move_on:
+            self.cars.append(Car(orientation, length, move_on_index))
+
         self.color = color
 
         self.free_pos = None

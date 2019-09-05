@@ -8,7 +8,7 @@ class State:
     Contructeur d'un état initial
     """
 
-    def __init__(self, pos):
+    def __init__(self, pos, c=None, d=None, previous_state=None):
         """
         pos donne la position de la voiture i (première case occupée par la voiture);
         """
@@ -17,16 +17,20 @@ class State:
         """
         c, d et prev premettent de retracer l'état précédent et le dernier mouvement effectué
         """
-        self.c = self.d = self.prev = None
 
-        self.nb_moves = 0
+        # self.c = self.d = self.prev = None
+        self.c = c
+        self.d = d
+        self.prev = previous_state
+
+        self.nb_moves = previous_state.nb_moves + 1
         self.h = 0
 
     """
     Constructeur d'un état à partir mouvement (c,d)
     """
 
-    def move(self, c, d) -> State:
+    def move(self, c, d):
         """
 
         :param c: index of the car [0, 5]
@@ -36,14 +40,14 @@ class State:
         # TODO
         new_positions = self.pos[:]
         new_positions[c] += d
-        new_state = State(new_positions)
-        new_state.prev = self
 
-    """ est il final? """
+        return State(new_positions, c, d, self)
+
 
     def success(self):
+        """ est il final? """
         # TODO
-        return False
+        return self.pos[0] >= 4
 
     """
     Estimation du nombre de coup restants 
