@@ -4,6 +4,8 @@ from typing import List
 import numpy as np
 import heapq
 
+from src.state import State
+
 
 class Car:
     def __init__(self, is_horizontal: bool, length: int, move_on_index: int):
@@ -17,16 +19,22 @@ class Rushhour:
     def __init__(self, horiz: List[bool], lengths, move_on, color=None):
         self.nbcars = len(horiz)
         self.cars = []
-        for orientation, length, move_on_index in horiz, lengths, move_on:
+        for orientation, length, move_on_index in zip(horiz, lengths, move_on):
             self.cars.append(Car(orientation, length, move_on_index))
 
         self.color = color
 
         self.free_pos = None
 
-    def init_positions(self, state):
+    def init_positions(self, state: State):
         self.free_pos = np.ones((6, 6), dtype=bool)
-        # TODO
+        for car, p in zip(self.cars, state.pos):
+            relative_pos = car.move_on_index
+            for i in range(car.length):
+                if car.is_horizontal:
+                    self.free_pos[relative_pos][i + p] -= 1
+                else:
+                    self.free_pos[i + p][relative_pos] -= 1
 
     def possible_moves(self, state):
         self.init_positions(state)

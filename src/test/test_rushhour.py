@@ -4,6 +4,9 @@ from src.state import State
 
 
 class TestRushhour(TestCase):
+    def setUp(self) -> None:
+        pass
+
     def test2(self):
         """ move_on describe the position of the car, according to its orientation
         """
