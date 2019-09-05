@@ -1,8 +1,8 @@
+import heapq
 from collections import deque
 from typing import List
 
 import numpy as np
-import heapq
 
 from src.state import State
 
