@@ -12,7 +12,7 @@ class State:
         """
         pos donne la position de la voiture i (première case occupée par la voiture);
         """
-        self.pos = np.array(pos, dtype=np.int)
+        self.pos = np.array(pos, dtype=np.int64)
 
         """
         c, d et prev permettent de retracer l'état précédent et le dernier mouvement effectué

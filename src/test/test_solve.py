@@ -36,58 +36,62 @@ class TestSolve(TestCase):
     def tearDown(self):
         t = time.time() - self.startTime
 
-        print("\n--------------------------------------------")
-        print(self._testMethodName)
+        print("\n\u250f" + "\u2501" * 32 + "\u2513")
+        print(f'\u2503 {self._testMethodName:<30} \u2503')
+        print("\u2517" + "\u2501" * 32 + "\u251b")
         print('')
         self.rh.print_solution(self.s)
         print('')
-        print("%s: %.3fs" % (self.id(), t))
-        print(f'nb visited = {self.visited}')
-        # print("\n--------------------------------------------")
+        print(f'elapsed\t\t:\t%.3fs' % t)
+        print(f'nb visited\t:\t{self.visited}')
+
+    def do_test(self):
+        self.algo = getattr(self.rh, self.algo_name)
+        self.s, self.visited = self.algo(self.s)
+        self.assertTrue(TestSolve.is_solved(self.s))
+        self.assertEqual(self.s.nb_moves, self.expected_nb_step)
 
     def test_solve46(self):
         self.rh = Rushhour(*game3)
         self.s = State([1, 0, 3, 1, 1, 4, 3, 4, 4, 2, 4, 1])
-        self.s, self.visited = self.rh.solve(self.s)
-        self.assertTrue(TestSolve.is_solved(self.s))
-        self.assertEqual(self.s.nb_moves, 46)
+        self.algo_name = 'solve'
+        self.expected_nb_step = 46
+        self.do_test()
 
     def test_solve46_Astar(self):
         self.rh = Rushhour(*game3)
         self.s = State([1, 0, 3, 1, 1, 4, 3, 4, 4, 2, 4, 1])
-        self.s, self.visited = self.rh.solve_Astar(self.s)
-        self.assertTrue(TestSolve.is_solved(self.s))
-        self.assertEqual(self.s.nb_moves, 46)
+        self.algo_name = 'solve_Astar'
+        self.expected_nb_step = 46
+        self.do_test()
 
     def test_solve16(self):
         self.rh = Rushhour(*game1)
         self.s = State([1, 0, 1, 4, 2, 4, 0, 1])
-        self.s, self.visited = self.rh.solve(self.s)
-        self.assertEqual(TestSolve.is_solved(self.s), True)
-        self.assertEqual(self.s.nb_moves, 16)
+        self.algo_name = 'solve'
+        self.expected_nb_step = 16
+        self.do_test()
 
-    # @unittest.skip("not implemented")
     def test_solve16_Astar(self):
         self.rh = Rushhour(*game1)
         self.s = State([1, 0, 1, 4, 2, 4, 0, 1])
-        self.s, self.visited = self.rh.solve_Astar(self.s)
-        self.assertEqual(TestSolve.is_solved(self.s), True)
-        self.assertEqual(self.s.nb_moves, 16)
+        self.algo_name = 'solve_Astar'
+        self.expected_nb_step = 16
+        self.do_test()
 
     def test_solve81(self):
         self.rh = Rushhour(*game2)
         self.s = State([3, 0, 1, 0, 1, 1, 1, 0, 3, 4, 4, 0, 3])
-        self.s, self.visited = self.rh.solve(self.s)
-        self.assertEqual(TestSolve.is_solved(self.s), True)
-        self.assertEqual(self.s.nb_moves, 81)
+        self.algo_name = 'solve'
+        self.expected_nb_step = 81
+        self.do_test()
 
-    # @unittest.skip("not implemented")
     def test_solve81_Astar(self):
         self.rh = Rushhour(*game2)
         self.s = State([3, 0, 1, 0, 1, 1, 1, 0, 3, 4, 4, 0, 3])
-        self.s, self.visited = self.rh.solve_Astar(self.s)
-        self.assertEqual(TestSolve.is_solved(self.s), True)
-        self.assertEqual(self.s.nb_moves, 81)
+        self.algo_name = 'solve_Astar'
+        self.expected_nb_step = 81
+        self.do_test()
 
 
 if __name__ == '__main__':
