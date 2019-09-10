@@ -22,7 +22,7 @@ class TestRushHour(TestCase):
                [False, False, False, False, True, False],
                [False, True, True, False, True, True], [False, True, True, True, False, False],
                [False, True, False, False, False, True]]
-        b = b and (rh.free_pos[i, j] == ans[i, j] for i in range(6) for j in range(6))
+        b = b and (rh.free_pos[i, j] == ans[i][j] for i in range(6) for j in range(6))
         print("\n", "résultat correct" if b else "mauvais résultat")
 
         self.assertTrue(b)

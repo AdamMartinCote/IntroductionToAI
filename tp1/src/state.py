@@ -1,5 +1,3 @@
-from typing import List
-
 import numpy as np
 
 
@@ -26,7 +24,7 @@ class State:
         except AttributeError:
             self.nb_moves = 0
 
-    def move(self, c: List[int], d: List[int]) -> 'State':
+    def move(self, c: int, d: int) -> 'State':
         """
         Constructeur d'un état à partir mouvement (c,d)
 

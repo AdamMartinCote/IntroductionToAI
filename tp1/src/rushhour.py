@@ -12,7 +12,7 @@ class RushHour:
     RED_CAR = 0
 
     def __init__(self, horiz: List[bool], lengths, move_on, color=None):
-        self.nbcars = len(horiz)
+        self.nb_cars = len(horiz)
         self.cars = []
         for orientation, length, move_on_index in zip(horiz, lengths, move_on):
             self.cars.append(Car(orientation, length, move_on_index))
