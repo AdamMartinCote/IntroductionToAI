@@ -61,10 +61,21 @@ class Rushhour:
         return new_states
 
     def solve(self, state):
+        """
+        Create a breadth-first graph of all possible
+        append and popLeft
+        """
         visited = set()
         fifo = deque([state])
-        visited.add(state)
-        # TODO
+
+        while len(fifo) > 0:
+            visited.add(state)
+            to_evaluate: State = fifo.popleft()
+            if to_evaluate.success():
+                return to_evaluate
+            else:
+                children = self.possible_moves(to_evaluate)
+                fifo.extend(children)
 
         return None
 
