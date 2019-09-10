@@ -41,11 +41,10 @@ class Rushhour:
     def possible_moves(self, state) -> List[State]:
         def check_if_position_empty_and_valid(position):
             is_inbound = 0 <= position[0] < 5 and 0 <= position[1] < 5
-            return self.free_pos[position[0]][position[1]] and is_inbound
+            return is_inbound and self.free_pos[position[0]][position[1]]
 
         self.init_positions(state)
         new_states: List[State] = []
-        # a = enumerate(zip(self.cars, state.pos))
         for i, car_and_p in enumerate(zip(self.cars, state.pos)):
             car = car_and_p[0]
             p = car_and_p[1]
