@@ -2,8 +2,8 @@ import time
 import unittest
 from unittest import TestCase
 
-from src.rushhour import RushHour
-from src.state import State
+from TP1.src.rushhour import RushHour
+from TP1.src.state import State
 
 game1 = [[True, True, False, False, True, True, False, False],
          [2, 2, 3, 2, 3, 2, 3, 3],

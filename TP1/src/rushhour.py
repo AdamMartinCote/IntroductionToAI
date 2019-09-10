@@ -4,7 +4,7 @@ from typing import List
 
 import numpy as np
 
-from src.state import State
+from TP1.src.state import State
 
 
 class Car:
