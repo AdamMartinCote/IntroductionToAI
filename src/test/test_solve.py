@@ -35,64 +35,59 @@ class TestSolve(TestCase):
 
     def tearDown(self):
         t = time.time() - self.startTime
+
+        print("\n--------------------------------------------")
+        print(self._testMethodName)
+        print('')
+        self.rh.print_solution(self.s)
+        print('')
         print("%s: %.3fs" % (self.id(), t))
+        print(f'nb visited = {self.visited}')
+        # print("\n--------------------------------------------")
 
     def test_solve46(self):
-        rh = Rushhour(*game3)
-        s = State([1, 0, 3, 1, 1, 4, 3, 4, 4, 2, 4, 1])
-        s = rh.solve(s)
-        rh.print_solution(s)
-        print("\n--------------------------------------------\n")
-        self.assertEqual(TestSolve.is_solved(s), True)
-        self.assertEqual(s.nb_moves, 46)
+        self.rh = Rushhour(*game3)
+        self.s = State([1, 0, 3, 1, 1, 4, 3, 4, 4, 2, 4, 1])
+        self.s, self.visited = self.rh.solve(self.s)
+        self.assertTrue(TestSolve.is_solved(self.s))
+        self.assertEqual(self.s.nb_moves, 46)
 
     def test_solve46_Astar(self):
-        rh = Rushhour(*game3)
-        s = State([1, 0, 3, 1, 1, 4, 3, 4, 4, 2, 4, 1])
-        s = rh.solve_Astar(s)
-        rh.print_solution(s)
-        print("\n--------------------------------------------\n")
-        self.assertEqual(TestSolve.is_solved(s), True)
-        self.assertEqual(s.nb_moves, 46)
+        self.rh = Rushhour(*game3)
+        self.s = State([1, 0, 3, 1, 1, 4, 3, 4, 4, 2, 4, 1])
+        self.s, self.visited = self.rh.solve_Astar(self.s)
+        self.assertTrue(TestSolve.is_solved(self.s))
+        self.assertEqual(self.s.nb_moves, 46)
 
     def test_solve16(self):
-        rh = Rushhour(*game1)
-        s = State([1, 0, 1, 4, 2, 4, 0, 1])
-        s = rh.solve(s)
-        rh.print_solution(s)
-        print("\n--------------------------------------------\n")
-        self.assertEqual(TestSolve.is_solved(s), True)
-        self.assertEqual(s.nb_moves, 16)
+        self.rh = Rushhour(*game1)
+        self.s = State([1, 0, 1, 4, 2, 4, 0, 1])
+        self.s, self.visited = self.rh.solve(self.s)
+        self.assertEqual(TestSolve.is_solved(self.s), True)
+        self.assertEqual(self.s.nb_moves, 16)
 
     # @unittest.skip("not implemented")
     def test_solve16_Astar(self):
-        rh = Rushhour(*game1)
-        s = State([1, 0, 1, 4, 2, 4, 0, 1])
-        s = rh.solve_Astar(s)
-        rh.print_solution(s)
-        print("\n--------------------------------------------\n")
-        self.assertEqual(TestSolve.is_solved(s), True)
-        self.assertEqual(s.nb_moves, 16)
+        self.rh = Rushhour(*game1)
+        self.s = State([1, 0, 1, 4, 2, 4, 0, 1])
+        self.s, self.visited = self.rh.solve_Astar(self.s)
+        self.assertEqual(TestSolve.is_solved(self.s), True)
+        self.assertEqual(self.s.nb_moves, 16)
 
     def test_solve81(self):
-        rh = Rushhour(*game2)
-        s = State([3, 0, 1, 0, 1, 1, 1, 0, 3, 4, 4, 0, 3])
-        s = rh.solve(s)
-        rh.print_solution(s)
-        print("\n--------------------------------------------\n")
-        self.assertEqual(TestSolve.is_solved(s), True)
-        self.assertEqual(s.nb_moves, 81)
+        self.rh = Rushhour(*game2)
+        self.s = State([3, 0, 1, 0, 1, 1, 1, 0, 3, 4, 4, 0, 3])
+        self.s, self.visited = self.rh.solve(self.s)
+        self.assertEqual(TestSolve.is_solved(self.s), True)
+        self.assertEqual(self.s.nb_moves, 81)
 
-    @unittest.skip("not implemented")
+    # @unittest.skip("not implemented")
     def test_solve81_Astar(self):
-        rh = Rushhour(*game2)
-        s = State([3, 0, 1, 0, 1, 1, 1, 0, 3, 4, 4, 0, 3])
-        s = rh.solve_Astar(s)
-        rh.print_solution(s)
-        print("\n--------------------------------------------\n")
-        self.assertEqual(TestSolve.is_solved(s), True)
-        self.assertEqual(s.nb_moves, 81)
-
+        self.rh = Rushhour(*game2)
+        self.s = State([3, 0, 1, 0, 1, 1, 1, 0, 3, 4, 4, 0, 3])
+        self.s, self.visited = self.rh.solve_Astar(self.s)
+        self.assertEqual(TestSolve.is_solved(self.s), True)
+        self.assertEqual(self.s.nb_moves, 81)
 
 
 if __name__ == '__main__':

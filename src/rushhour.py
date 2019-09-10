@@ -62,7 +62,7 @@ class Rushhour:
 
         return new_states
 
-    def solve(self, state) -> State or None:
+    def solve(self, state) -> (State or None, int):
         """
         Create a breadth-first graph of all possible
         append and popLeft
@@ -76,36 +76,35 @@ class Rushhour:
                 continue
             visited.add(state_to_evaluate)
             if state_to_evaluate.success():
-                return state_to_evaluate
+                return state_to_evaluate, len(visited)
             else:
                 children: List[State] = self.possible_moves(state_to_evaluate)
                 fifo.extend(filter(lambda x: x not in visited, children))
 
-        return None
+        return None, len(visited)
 
-    def solve_Astar(self, state: State):
+    def solve_Astar(self, state: State) -> (State or None, int):
         visited = set()
-        # visited.add(state)
 
         priority_queue = []
         state.h = state.estimee1()
         heapq.heappush(priority_queue, state)
 
         while len(priority_queue) > 0:
-            state_to_evaluate: State = priority_queue.pop()
+            state_to_evaluate: State = priority_queue.pop(0)
 
             if state_to_evaluate in visited:
                 continue
             visited.add(state_to_evaluate)
             if state_to_evaluate.success():
-                return state_to_evaluate
+                return state_to_evaluate, len(visited)
             else:
                 children: List[State] = self.possible_moves(state_to_evaluate)
                 for child in children:
                     if child not in visited:
                         child.h = child.estimee1()
                         heapq.heappush(priority_queue, child)
-        return None
+        return None, len(visited)
 
     def print_solution(self, state: State) -> None:
         self.render(state)
