@@ -40,7 +40,8 @@ class Rushhour:
 
     def possible_moves(self, state):
         def check_if_position_empty_and_valid(position):
-            return self.free_pos[position[0]][position[1]]
+            is_inbound = 0 <= position[0] < 5 and 0 <= position[1] < 5
+            return self.free_pos[position[0]][position[1]] and is_inbound
 
         self.init_positions(state)
         new_states = []
