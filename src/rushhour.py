@@ -10,6 +10,7 @@ from src.state import State
 class Car:
     def __init__(self, is_horizontal: bool, length: int, move_on_index: int):
         self.is_horizontal = is_horizontal
+        self.is_vertical = not is_horizontal
         self.length = length
         self.move_on_index = move_on_index
 
@@ -60,7 +61,7 @@ class Rushhour:
 
         return new_states
 
-    def solve(self, state):
+    def solve(self, state) -> State or None:
         """
         Create a breadth-first graph of all possible
         append and popLeft
@@ -69,13 +70,17 @@ class Rushhour:
         fifo = deque([state])
 
         while len(fifo) > 0:
-            visited.add(state)
+            # print(len(fifo))
             to_evaluate: State = fifo.popleft()
+            if to_evaluate in visited:
+                continue
+            visited.add(to_evaluate)
             if to_evaluate.success():
+                # print('got it bitches')
                 return to_evaluate
             else:
-                children = self.possible_moves(to_evaluate)
-                fifo.extend(children)
+                children: List[State] = self.possible_moves(to_evaluate)
+                fifo.extend(filter(lambda x: x not in visited, children))
 
         return None
 
@@ -90,6 +95,18 @@ class Rushhour:
         # TODO
         return None
 
-    def print_solution(self, state):
-        # TODO
-        return 0
+    def print_solution(self, state: State) -> None:
+        self.render(state)
+
+    def render(self, state: State) -> None:
+        dim = len(self.free_pos)
+        grid = np.zeros((dim, dim), dtype=int)
+        red_car = self.cars[0]
+        if red_car.is_horizontal:
+            for i in range(red_car.length):
+                grid[red_car.move_on_index][state.pos[0] + i] = 1
+        if red_car.is_vertical:
+            for i in range(red_car.length):
+                grid[state.pos[0] + i][red_car.move_on_index] = 1
+
+        print(grid)
