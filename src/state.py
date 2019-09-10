@@ -12,7 +12,7 @@ class State:
         """
         pos donne la position de la voiture i (première case occupée par la voiture);
         """
-        self.pos = np.array(pos)
+        self.pos = np.array(pos, dtype=np.int)
 
         """
         c, d et prev permettent de retracer l'état précédent et le dernier mouvement effectué
@@ -21,13 +21,13 @@ class State:
         self.c = c
         self.d = d
         self.prev = previous_state
+        self.h = 0
 
         try:
             self.nb_moves = previous_state.nb_moves + 1
         except AttributeError:
             self.nb_moves = 0
 
-        self.h = 0
 
     """
     Constructeur d'un état à partir mouvement (c,d)
@@ -53,11 +53,16 @@ class State:
     Estimation du nombre de coup restants 
     """
 
-    def estimee1(self):
-        # TODO
-        return 0
+    def estimee1(self) -> int:
+        """
+        """
+        red_car_position = self.pos[0]
+        goal_position = 4
+        return int(goal_position - red_car_position)
 
-    def estimee2(self, rh):
+    def estimee2(self, rh: 'State'):
+        """ h()
+        """
         # TODO
         return 0
 
@@ -69,7 +74,7 @@ class State:
 
         return np.array_equal(self.pos, other.pos)
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         h = 0
         for i in range(len(self.pos)):
             h = 37 * h + self.pos[i]

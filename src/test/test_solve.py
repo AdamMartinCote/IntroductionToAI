@@ -16,6 +16,12 @@ game2 = [[True, False, True, False, False, False, False, True, False, False, Tru
          ["rouge", "jaune", "vert clair", "orange", "bleu clair", "rose", "violet clair", "bleu", "violet",
           "vert", "noir", "beige", "jaune clair"]]
 
+game3 = [[True, False, True, False, False, True, False, True, False, True, False, True],
+         [2, 2, 3, 2, 3, 2, 2, 2, 2, 2, 2, 3],
+         [2, 2, 0, 0, 3, 1, 1, 3, 0, 4, 5, 5],
+         ["rouge", "vert clair", "jaune", "orange", "violet clair", "bleu ciel", "rose", "violet", "vert",
+          "noir", "beige", "bleu"]]
+
 
 class TestSolve(TestCase):
 
@@ -31,6 +37,24 @@ class TestSolve(TestCase):
         t = time.time() - self.startTime
         print("%s: %.3fs" % (self.id(), t))
 
+    def test_solve46(self):
+        rh = Rushhour(*game3)
+        s = State([1, 0, 3, 1, 1, 4, 3, 4, 4, 2, 4, 1])
+        s = rh.solve(s)
+        rh.print_solution(s)
+        print("\n--------------------------------------------\n")
+        self.assertEqual(TestSolve.is_solved(s), True)
+        self.assertEqual(s.nb_moves, 46)
+
+    def test_solve46_Astar(self):
+        rh = Rushhour(*game3)
+        s = State([1, 0, 3, 1, 1, 4, 3, 4, 4, 2, 4, 1])
+        s = rh.solve_Astar(s)
+        rh.print_solution(s)
+        print("\n--------------------------------------------\n")
+        self.assertEqual(TestSolve.is_solved(s), True)
+        self.assertEqual(s.nb_moves, 46)
+
     def test_solve16(self):
         rh = Rushhour(*game1)
         s = State([1, 0, 1, 4, 2, 4, 0, 1])
@@ -38,8 +62,9 @@ class TestSolve(TestCase):
         rh.print_solution(s)
         print("\n--------------------------------------------\n")
         self.assertEqual(TestSolve.is_solved(s), True)
+        self.assertEqual(s.nb_moves, 16)
 
-    @unittest.skip("not implemented")
+    # @unittest.skip("not implemented")
     def test_solve16_Astar(self):
         rh = Rushhour(*game1)
         s = State([1, 0, 1, 4, 2, 4, 0, 1])
@@ -47,6 +72,7 @@ class TestSolve(TestCase):
         rh.print_solution(s)
         print("\n--------------------------------------------\n")
         self.assertEqual(TestSolve.is_solved(s), True)
+        self.assertEqual(s.nb_moves, 16)
 
     def test_solve81(self):
         rh = Rushhour(*game2)
@@ -55,6 +81,7 @@ class TestSolve(TestCase):
         rh.print_solution(s)
         print("\n--------------------------------------------\n")
         self.assertEqual(TestSolve.is_solved(s), True)
+        self.assertEqual(s.nb_moves, 81)
 
     @unittest.skip("not implemented")
     def test_solve81_Astar(self):
@@ -64,6 +91,8 @@ class TestSolve(TestCase):
         rh.print_solution(s)
         print("\n--------------------------------------------\n")
         self.assertEqual(TestSolve.is_solved(s), True)
+        self.assertEqual(s.nb_moves, 81)
+
 
 
 if __name__ == '__main__':

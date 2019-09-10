@@ -16,6 +16,7 @@ class Car:
 
 
 class Rushhour:
+    RED_CAR = 0
 
     def __init__(self, horiz: List[bool], lengths, move_on, color=None):
         self.nbcars = len(horiz)
@@ -70,29 +71,40 @@ class Rushhour:
         fifo = deque([state])
 
         while len(fifo) > 0:
-            # print(len(fifo))
-            to_evaluate: State = fifo.popleft()
-            if to_evaluate in visited:
+            state_to_evaluate: State = fifo.popleft()
+            if state_to_evaluate in visited:
                 continue
-            visited.add(to_evaluate)
-            if to_evaluate.success():
-                # print('got it bitches')
-                return to_evaluate
+            visited.add(state_to_evaluate)
+            if state_to_evaluate.success():
+                return state_to_evaluate
             else:
-                children: List[State] = self.possible_moves(to_evaluate)
+                children: List[State] = self.possible_moves(state_to_evaluate)
                 fifo.extend(filter(lambda x: x not in visited, children))
 
         return None
 
-    def solve_Astar(self, state):
+    def solve_Astar(self, state: State):
         visited = set()
-        visited.add(state)
+        # visited.add(state)
 
         priority_queue = []
         state.h = state.estimee1()
         heapq.heappush(priority_queue, state)
 
-        # TODO
+        while len(priority_queue) > 0:
+            state_to_evaluate: State = priority_queue.pop()
+
+            if state_to_evaluate in visited:
+                continue
+            visited.add(state_to_evaluate)
+            if state_to_evaluate.success():
+                return state_to_evaluate
+            else:
+                children: List[State] = self.possible_moves(state_to_evaluate)
+                for child in children:
+                    if child not in visited:
+                        child.h = child.estimee1()
+                        heapq.heappush(priority_queue, child)
         return None
 
     def print_solution(self, state: State) -> None:
