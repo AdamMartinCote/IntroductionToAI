@@ -1,17 +1,17 @@
 from unittest import TestCase
 
-from src.rushhour import Rushhour
+from src.rushhour import RushHour
 from src.state import State
 
 
-class TestRushhour(TestCase):
+class TestRushHour(TestCase):
     def setUp(self) -> None:
         pass
 
     def test2(self):
         """ move_on describe the position of the car, according to its orientation
         """
-        rh = Rushhour([True, True, False, False, True, True, False, False],
+        rh = RushHour([True, True, False, False, True, True, False, False],
                       [2, 2, 3, 2, 3, 2, 3, 3],
                       [2, 0, 0, 0, 5, 4, 5, 3])
         s = State([1, 0, 1, 4, 2, 4, 0, 1])
@@ -28,7 +28,7 @@ class TestRushhour(TestCase):
         self.assertTrue(b)
         
     def test_possibles_moves(self) -> None:
-        rh = Rushhour([True, False, True, False, False, True, False, True, False, True, False, True],
+        rh = RushHour([True, False, True, False, False, True, False, True, False, True, False, True],
                       [2, 2, 3, 2, 3, 2, 2, 2, 2, 2, 2, 3],
                       [2, 2, 0, 0, 3, 1, 1, 3, 0, 4, 5, 5])
         s = State([1, 0, 3, 1, 1, 4, 3, 4, 4, 2, 4, 1])

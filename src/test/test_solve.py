@@ -2,7 +2,7 @@ import time
 import unittest
 from unittest import TestCase
 
-from src.rushhour import Rushhour
+from src.rushhour import RushHour
 from src.state import State
 
 game1 = [[True, True, False, False, True, True, False, False],
@@ -28,7 +28,7 @@ class TestSolve(TestCase):
     @staticmethod
     def is_solved(state) -> bool:
         wanted_car_position = 4
-        return state.pos[Rushhour.RED_CAR] == wanted_car_position
+        return state.pos[RushHour.RED_CAR] == wanted_car_position
 
     def setUp(self):
         self.startTime = time.time()
@@ -52,42 +52,42 @@ class TestSolve(TestCase):
         self.assertEqual(self.s.nb_moves, self.expected_nb_step)
 
     def test_solve46(self):
-        self.rh = Rushhour(*game3)
+        self.rh = RushHour(*game3)
         self.s = State([1, 0, 3, 1, 1, 4, 3, 4, 4, 2, 4, 1])
         self.algo_name = 'solve'
         self.expected_nb_step = 46
         self.do_test()
 
     def test_solve46_Astar(self):
-        self.rh = Rushhour(*game3)
+        self.rh = RushHour(*game3)
         self.s = State([1, 0, 3, 1, 1, 4, 3, 4, 4, 2, 4, 1])
         self.algo_name = 'solve_Astar'
         self.expected_nb_step = 46
         self.do_test()
 
     def test_solve16(self):
-        self.rh = Rushhour(*game1)
+        self.rh = RushHour(*game1)
         self.s = State([1, 0, 1, 4, 2, 4, 0, 1])
         self.algo_name = 'solve'
         self.expected_nb_step = 16
         self.do_test()
 
     def test_solve16_Astar(self):
-        self.rh = Rushhour(*game1)
+        self.rh = RushHour(*game1)
         self.s = State([1, 0, 1, 4, 2, 4, 0, 1])
         self.algo_name = 'solve_Astar'
         self.expected_nb_step = 16
         self.do_test()
 
     def test_solve81(self):
-        self.rh = Rushhour(*game2)
+        self.rh = RushHour(*game2)
         self.s = State([3, 0, 1, 0, 1, 1, 1, 0, 3, 4, 4, 0, 3])
         self.algo_name = 'solve'
         self.expected_nb_step = 81
         self.do_test()
 
     def test_solve81_Astar(self):
-        self.rh = Rushhour(*game2)
+        self.rh = RushHour(*game2)
         self.s = State([3, 0, 1, 0, 1, 1, 1, 0, 3, 4, 4, 0, 3])
         self.algo_name = 'solve_Astar'
         self.expected_nb_step = 81

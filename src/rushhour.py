@@ -15,7 +15,7 @@ class Car:
         self.move_on_index = move_on_index
 
 
-class Rushhour:
+class RushHour:
     RED_CAR = 0
 
     def __init__(self, horiz: List[bool], lengths, move_on, color=None):
