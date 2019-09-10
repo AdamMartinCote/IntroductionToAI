@@ -38,22 +38,26 @@ class Rushhour:
                 else:
                     self.free_pos[i + p][relative_pos] -= 1
 
-    def possible_moves(self, state):
+    def possible_moves(self, state) -> List[State]:
         def check_if_position_empty_and_valid(position):
             return self.free_pos[position[0]][position[1]]
 
         self.init_positions(state)
-        new_states = []
-        # TODO next step
-        for i, car, p in zip(*enumerate(self.cars), state.pos):
+        new_states: List[State] = []
+        # a = enumerate(zip(self.cars, state.pos))
+        for i, car_and_p in enumerate(zip(self.cars, state.pos)):
+            car = car_and_p[0]
+            p = car_and_p[1]
+
             space_in_font = (car.move_on_index, p + car.length) if car.is_horizontal \
                 else (p + car.length, car.move_on_index)
             space_in_rear = (car.move_on_index, p - 1) if car.is_horizontal \
                 else (p - 1, car.move_on_index)
             if check_if_position_empty_and_valid(space_in_font):
-                pass
+                new_states.append(state.move(i, 1))
             if check_if_position_empty_and_valid(space_in_rear):
-                pass
+                new_states.append(state.move(i, -11))
+
         return new_states
 
     def solve(self, state):

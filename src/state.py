@@ -13,10 +13,9 @@ class State:
         self.pos = np.array(pos)
 
         """
-        c, d et prev premettent de retracer l'état précédent et le dernier mouvement effectué
+        c, d et prev permettent de retracer l'état précédent et le dernier mouvement effectué
         """
 
-        # self.c = self.d = self.prev = None
         self.c = c
         self.d = d
         self.prev = previous_state
