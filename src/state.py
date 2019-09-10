@@ -4,12 +4,10 @@ import numpy as np
 
 
 class State:
-    """
-    Contructeur d'un état initial
-    """
 
     def __init__(self, pos, c=None, d=None, previous_state=None):
         """
+        Contructeur d'un état initial
         pos donne la position de la voiture i (première case occupée par la voiture);
         """
         self.pos = np.array(pos, dtype=np.int64)
@@ -28,13 +26,9 @@ class State:
         except AttributeError:
             self.nb_moves = 0
 
-
-    """
-    Constructeur d'un état à partir mouvement (c,d)
-    """
-
-    def move(self, c: List[int], d: List[int]):
+    def move(self, c: List[int], d: List[int]) -> 'State':
         """
+        Constructeur d'un état à partir mouvement (c,d)
 
         :param c: index of the car [0, nb_cars - 1]
         :param d: direction of the move [-1, 1]
@@ -49,28 +43,23 @@ class State:
         """ est il final? """
         return self.pos[0] >= 4
 
-    """
-    Estimation du nombre de coup restants 
-    """
-
     def estimee1(self) -> int:
         """
+        Estimation du nombre de coup restants
         """
         red_car_position = self.pos[0]
         goal_position = 4
         return int(goal_position - red_car_position)
 
-    def estimee2(self, rh: 'State'):
-        """ h()
-        """
+    def estimee2(self, rh: 'State') -> int:
         # TODO
         return 0
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'State') -> bool:
         if not isinstance(other, State):
             return NotImplemented
         if len(self.pos) != len(other.pos):
-            print("les états n'ont pas le même nombre de voitures")
+            raise Exception("les états n'ont pas le même nombre de voitures")
 
         return np.array_equal(self.pos, other.pos)
 
@@ -80,5 +69,5 @@ class State:
             h = 37 * h + self.pos[i]
         return int(h)
 
-    def __lt__(self, other):
+    def __lt__(self, other: 'State') -> bool:
         return (self.nb_moves + self.h) < (other.nb_moves + other.h)
