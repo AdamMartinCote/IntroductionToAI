@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 
 
@@ -31,10 +33,10 @@ class State:
     Constructeur d'un état à partir mouvement (c,d)
     """
 
-    def move(self, c, d):
+    def move(self, c: List[int], d: List[int]):
         """
 
-        :param c: index of the car [0, 5]
+        :param c: index of the car [0, nb_cars - 1]
         :param d: direction of the move [-1, 1]
         :return: State object
         """

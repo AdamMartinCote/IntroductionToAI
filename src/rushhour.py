@@ -40,7 +40,7 @@ class Rushhour:
 
     def possible_moves(self, state) -> List[State]:
         def check_if_position_empty_and_valid(position):
-            is_inbound = 0 <= position[0] < 5 and 0 <= position[1] < 5
+            is_inbound = 0 <= position[0] < 6 and 0 <= position[1] < 6
             return is_inbound and self.free_pos[position[0]][position[1]]
 
         self.init_positions(state)
@@ -56,7 +56,7 @@ class Rushhour:
             if check_if_position_empty_and_valid(space_in_font):
                 new_states.append(state.move(i, 1))
             if check_if_position_empty_and_valid(space_in_rear):
-                new_states.append(state.move(i, -11))
+                new_states.append(state.move(i, -1))
 
         return new_states
 
