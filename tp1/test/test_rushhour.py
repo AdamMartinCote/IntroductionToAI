@@ -2,6 +2,7 @@ from unittest import TestCase
 
 from tp1.src.rushhour import RushHour
 from tp1.src.state import State
+from tp1.test.common import print_header
 
 
 class TestRushHour(TestCase):
@@ -11,6 +12,9 @@ class TestRushHour(TestCase):
     def test2(self):
         """ move_on describe the position of the car, according to its orientation
         """
+        print_header(self._testMethodName)
+        print('')
+
         rh = RushHour([True, True, False, False, True, True, False, False],
                       [2, 2, 3, 2, 3, 2, 3, 3],
                       [2, 0, 0, 0, 5, 4, 5, 3])
@@ -28,6 +32,9 @@ class TestRushHour(TestCase):
         self.assertTrue(b)
         
     def test_possibles_moves(self) -> None:
+        print_header(self._testMethodName)
+        print('')
+
         rh = RushHour([True, False, True, False, False, True, False, True, False, True, False, True],
                       [2, 2, 3, 2, 3, 2, 2, 2, 2, 2, 2, 3],
                       [2, 2, 0, 0, 3, 1, 1, 3, 0, 4, 5, 5])

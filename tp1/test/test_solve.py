@@ -4,6 +4,7 @@ from unittest import TestCase
 
 from tp1.src.rushhour import RushHour
 from tp1.src.state import State
+from tp1.test.common import print_header
 
 game1 = [[True, True, False, False, True, True, False, False],
          [2, 2, 3, 2, 3, 2, 3, 3],
@@ -35,10 +36,8 @@ class TestSolve(TestCase):
 
     def tearDown(self):
         t = time.time() - self.startTime
+        print_header(self._testMethodName)
 
-        print("\n\u250f" + "\u2501" * 32 + "\u2513")
-        print(f'\u2503 {self._testMethodName:<30} \u2503')
-        print("\u2517" + "\u2501" * 32 + "\u251b")
         print('')
         self.rh.print_solution(self.s)
         print('')

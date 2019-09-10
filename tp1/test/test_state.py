@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from tp1.src.state import State
+from tp1.test.common import print_header
 
 
 class TestState(TestCase):
@@ -8,6 +9,9 @@ class TestState(TestCase):
         self.positioning = [1, 0, 1, 4, 2, 4, 0, 1]
 
     def test1(self):
+        print_header(self._testMethodName)
+        print('')
+
         s0 = State(self.positioning)
         b = not s0.success()
         print(b)
