@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from TP1.src.rushhour import RushHour
-from TP1.src.state import State
+from tp1.src.rushhour import RushHour
+from tp1.src.state import State
 
 
 class TestRushHour(TestCase):

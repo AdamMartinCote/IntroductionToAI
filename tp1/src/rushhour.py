@@ -4,8 +4,8 @@ from typing import List
 
 import numpy as np
 
-from TP1.src.car import Car
-from TP1.src.state import State
+from tp1.src.car import Car
+from tp1.src.state import State
 
 
 class RushHour:
