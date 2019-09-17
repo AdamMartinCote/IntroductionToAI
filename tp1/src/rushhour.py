@@ -21,24 +21,26 @@ class RushHour:
 
         self.free_pos = None
 
-    def init_positions(self, state: State):
+    @staticmethod
+    def get_free_pos(state: State, cars) -> np.ndarray:
         """ true means empty... :/
         """
-        self.free_pos = np.ones((6, 6), dtype=bool)
-        for car, p in zip(self.cars, state.pos):
+        fp = np.ones((6, 6), dtype=bool)
+        for car, p in zip(cars, state.pos):
             relative_pos = car.move_on_index
             for i in range(car.length):
                 if car.is_horizontal:
-                    self.free_pos[relative_pos][i + p] -= 1
+                    fp[relative_pos][i + p] -= 1
                 else:
-                    self.free_pos[i + p][relative_pos] -= 1
+                    fp[i + p][relative_pos] -= 1
+        return fp
 
     def possible_moves(self, state) -> List[State]:
         def check_if_position_empty_and_valid(position):
             is_inbound = 0 <= position[0] < 6 and 0 <= position[1] < 6
             return is_inbound and self.free_pos[position[0]][position[1]]
 
-        self.init_positions(state)
+        self.free_pos = self.get_free_pos(state, self.cars)
         new_states: List[State] = []
         for i, car_and_p in enumerate(zip(self.cars, state.pos)):
             car = car_and_p[0]
@@ -99,7 +101,32 @@ class RushHour:
                         heapq.heappush(priority_queue, child)
         return None, len(visited)
 
+    def solve_Astar_prime(self, state: State) -> (State or None, int):
+        visited = set()
+
+        priority_queue = []
+        self.free_pos = self.get_free_pos(state, self.cars)
+        state.h = state.estimee2(self.free_pos, self.cars)
+        heapq.heappush(priority_queue, state)
+
+        while len(priority_queue) > 0:
+            state_to_evaluate: State = priority_queue.pop(0)
+
+            if state_to_evaluate in visited:
+                continue
+            visited.add(state_to_evaluate)
+            if state_to_evaluate.success():
+                return state_to_evaluate, len(visited)
+            else:
+                children: List[State] = self.possible_moves(state_to_evaluate)
+                for child in children:
+                    if child not in visited:
+                        child.h = child.estimee1()
+                        heapq.heappush(priority_queue, child)
+        return None, len(visited)
+
     def print_solution(self, state: State) -> None:
+        # self.free_pos = RushHour.get_free_pos(state, self.cars)
         self.render(state)
 
     def render(self, state: State) -> None:

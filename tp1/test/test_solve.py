@@ -57,24 +57,10 @@ class TestSolve(TestCase):
         self.expected_nb_step = 46
         self.do_test()
 
-    def test_solve46_Astar(self):
-        self.rh = RushHour(*game3)
-        self.s = State([1, 0, 3, 1, 1, 4, 3, 4, 4, 2, 4, 1])
-        self.algo_name = 'solve_Astar'
-        self.expected_nb_step = 46
-        self.do_test()
-
     def test_solve16(self):
         self.rh = RushHour(*game1)
         self.s = State([1, 0, 1, 4, 2, 4, 0, 1])
         self.algo_name = 'solve'
-        self.expected_nb_step = 16
-        self.do_test()
-
-    def test_solve16_Astar(self):
-        self.rh = RushHour(*game1)
-        self.s = State([1, 0, 1, 4, 2, 4, 0, 1])
-        self.algo_name = 'solve_Astar'
         self.expected_nb_step = 16
         self.do_test()
 
@@ -85,10 +71,45 @@ class TestSolve(TestCase):
         self.expected_nb_step = 81
         self.do_test()
 
+    def test_solve46_Astar(self):
+        self.rh = RushHour(*game3)
+        self.s = State([1, 0, 3, 1, 1, 4, 3, 4, 4, 2, 4, 1])
+        self.algo_name = 'solve_Astar'
+        self.expected_nb_step = 46
+        self.do_test()
+
+    def test_solve16_Astar(self):
+        self.rh = RushHour(*game1)
+        self.s = State([1, 0, 1, 4, 2, 4, 0, 1])
+        self.algo_name = 'solve_Astar'
+        self.expected_nb_step = 16
+        self.do_test()
+
     def test_solve81_Astar(self):
         self.rh = RushHour(*game2)
         self.s = State([3, 0, 1, 0, 1, 1, 1, 0, 3, 4, 4, 0, 3])
         self.algo_name = 'solve_Astar'
+        self.expected_nb_step = 81
+        self.do_test()
+
+    def test_solve46_Astar_prime(self):
+        self.rh = RushHour(*game3)
+        self.s = State([1, 0, 3, 1, 1, 4, 3, 4, 4, 2, 4, 1])
+        self.algo_name = 'solve_Astar_prime'
+        self.expected_nb_step = 46
+        self.do_test()
+
+    def test_solve16_Astar_prime(self):
+        self.rh = RushHour(*game1)
+        self.s = State([1, 0, 1, 4, 2, 4, 0, 1])
+        self.algo_name = 'solve_Astar_prime'
+        self.expected_nb_step = 16
+        self.do_test()
+
+    def test_solve81_Astar_prime(self):
+        self.rh = RushHour(*game2)
+        self.s = State([3, 0, 1, 0, 1, 1, 1, 0, 3, 4, 4, 0, 3])
+        self.algo_name = 'solve_Astar_prime'
         self.expected_nb_step = 81
         self.do_test()
 

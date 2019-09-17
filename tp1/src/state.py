@@ -1,4 +1,8 @@
+from typing import List
+
 import numpy as np
+
+from tp1.src.car import Car
 
 
 class State:
@@ -49,9 +53,17 @@ class State:
         goal_position = 4
         return int(goal_position - red_car_position)
 
-    def estimee2(self, rh: 'State') -> int:
-        # TODO
-        return 0
+    def estimee2(self, free_pos: np.ndarray, cars: List[Car]) -> int:
+        """
+        Estimation du nombre de blocage entre l'auto rouge et la sortie
+        """
+        red_car = cars[0]
+        space_after_red_car = self.pos[0] + red_car.length
+        impediments = 0
+        for i in range(space_after_red_car, len(free_pos[0])):
+            if not free_pos[red_car.move_on_index][i]:
+                impediments += 1
+        return impediments + self.estimee1()
 
     def __eq__(self, other: 'State') -> bool:
         if not isinstance(other, State):

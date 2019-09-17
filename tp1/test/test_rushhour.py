@@ -19,7 +19,7 @@ class TestRushHour(TestCase):
                       [2, 2, 3, 2, 3, 2, 3, 3],
                       [2, 0, 0, 0, 5, 4, 5, 3])
         s = State([1, 0, 1, 4, 2, 4, 0, 1])
-        rh.init_positions(s)
+        rh.free_pos = RushHour.get_free_pos(s, rh.cars)
         b = True
         print(rh.free_pos)
         ans = [[False, False, True, True, True, False], [False, True, True, False, True, False],
