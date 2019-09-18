@@ -113,6 +113,27 @@ class TestSolve(TestCase):
         self.expected_nb_step = 81
         self.do_test()
 
+    def test_solve46_Astar_prime_prime(self):
+        self.rh = RushHour(*game3)
+        self.s = State([1, 0, 3, 1, 1, 4, 3, 4, 4, 2, 4, 1])
+        self.algo_name = 'solve_Astar_prime_prime'
+        self.expected_nb_step = 46
+        self.do_test()
+
+    def test_solve16_Astar_prime_prime(self):
+        self.rh = RushHour(*game1)
+        self.s = State([1, 0, 1, 4, 2, 4, 0, 1])
+        self.algo_name = 'solve_Astar_prime_prime'
+        self.expected_nb_step = 16
+        self.do_test()
+
+    def test_solve81_Astar_prime_prime(self):
+        self.rh = RushHour(*game2)
+        self.s = State([3, 0, 1, 0, 1, 1, 1, 0, 3, 4, 4, 0, 3])
+        self.algo_name = 'solve_Astar_prime_prime'
+        self.expected_nb_step = 81
+        self.do_test()
+
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TestSolve)

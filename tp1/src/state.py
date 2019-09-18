@@ -1,3 +1,4 @@
+import random
 from typing import List
 
 import numpy as np
@@ -63,7 +64,10 @@ class State:
         for i in range(space_after_red_car, len(free_pos[0])):
             if not free_pos[red_car.move_on_index][i]:
                 impediments += 1
-        return impediments + self.estimee1()
+        return impediments * 2 + self.estimee1()
+
+    def estimee3(self) -> int:
+        return random.randint(1, 10)
 
     def __eq__(self, other: 'State') -> bool:
         if not isinstance(other, State):

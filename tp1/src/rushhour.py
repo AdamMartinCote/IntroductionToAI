@@ -125,6 +125,30 @@ class RushHour:
                         heapq.heappush(priority_queue, child)
         return None, len(visited)
 
+    def solve_Astar_prime_prime(self, state: State) -> (State or None, int):
+        visited = set()
+
+        priority_queue = []
+        self.free_pos = self.get_free_pos(state, self.cars)
+        state.h = state.estimee3()
+        heapq.heappush(priority_queue, state)
+
+        while len(priority_queue) > 0:
+            state_to_evaluate: State = priority_queue.pop(0)
+
+            if state_to_evaluate in visited:
+                continue
+            visited.add(state_to_evaluate)
+            if state_to_evaluate.success():
+                return state_to_evaluate, len(visited)
+            else:
+                children: List[State] = self.possible_moves(state_to_evaluate)
+                for child in children:
+                    if child not in visited:
+                        child.h = child.estimee1()
+                        heapq.heappush(priority_queue, child)
+        return None, len(visited)
+
     def print_solution(self, state: State) -> None:
         # self.free_pos = RushHour.get_free_pos(state, self.cars)
         self.render(state)
