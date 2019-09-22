@@ -86,7 +86,8 @@ class RushHour:
         heapq.heappush(priority_queue, state)
 
         while len(priority_queue) > 0:
-            state_to_evaluate: State = priority_queue.pop(0)
+
+            state_to_evaluate: State = heapq.heappop(priority_queue)
 
             if state_to_evaluate in visited:
                 continue
@@ -110,7 +111,7 @@ class RushHour:
         heapq.heappush(priority_queue, state)
 
         while len(priority_queue) > 0:
-            state_to_evaluate: State = priority_queue.pop(0)
+            state_to_evaluate: State = heapq.heappop(priority_queue)
 
             if state_to_evaluate in visited:
                 continue
@@ -121,7 +122,7 @@ class RushHour:
                 children: List[State] = self.possible_moves(state_to_evaluate)
                 for child in children:
                     if child not in visited:
-                        child.h = child.estimee1()
+                        child.h = child.estimee2(self.free_pos, self.cars)
                         heapq.heappush(priority_queue, child)
         return None, len(visited)
 
@@ -134,7 +135,7 @@ class RushHour:
         heapq.heappush(priority_queue, state)
 
         while len(priority_queue) > 0:
-            state_to_evaluate: State = priority_queue.pop(0)
+            state_to_evaluate: State = heapq.heappop(priority_queue)
 
             if state_to_evaluate in visited:
                 continue
@@ -145,7 +146,7 @@ class RushHour:
                 children: List[State] = self.possible_moves(state_to_evaluate)
                 for child in children:
                     if child not in visited:
-                        child.h = child.estimee1()
+                        child.h = child.estimee3()
                         heapq.heappush(priority_queue, child)
         return None, len(visited)
 
