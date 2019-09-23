@@ -151,18 +151,18 @@ class RushHour:
         return None, len(visited)
 
     def print_solution(self, state: State) -> None:
-        # self.free_pos = RushHour.get_free_pos(state, self.cars)
         self.render(state)
 
     def render(self, state: State) -> None:
         dim = len(self.free_pos)
         grid = np.zeros((dim, dim), dtype=int)
-        red_car = self.cars[0]
-        if red_car.is_horizontal:
-            for i in range(red_car.length):
-                grid[red_car.move_on_index][state.pos[0] + i] = 1
-        if red_car.is_vertical:
-            for i in range(red_car.length):
-                grid[state.pos[0] + i][red_car.move_on_index] = 1
+        # red_car = self.cars[0]
+        for idx, car in enumerate(self.cars):
+            if car.is_horizontal:
+                for i in range(car.length):
+                    grid[car.move_on_index][state.pos[idx] + i] = idx + 1
+            if car.is_vertical:
+                for i in range(car.length):
+                    grid[state.pos[idx] + i][car.move_on_index] = idx + 1
 
         print(grid)
