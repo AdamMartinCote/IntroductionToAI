@@ -131,7 +131,7 @@ class RushHour:
 
         priority_queue = []
         self.free_pos = self.get_free_pos(state, self.cars)
-        state.h = state.estimee3()
+        state.h = state.estimee3(self.free_pos, self.cars)
         heapq.heappush(priority_queue, state)
 
         while len(priority_queue) > 0:
@@ -146,7 +146,7 @@ class RushHour:
                 children: List[State] = self.possible_moves(state_to_evaluate)
                 for child in children:
                     if child not in visited:
-                        child.h = child.estimee3()
+                        child.h = child.estimee3(self.free_pos, self.cars)
                         heapq.heappush(priority_queue, child)
         return None, len(visited)
 

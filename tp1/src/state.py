@@ -66,8 +66,22 @@ class State:
                 impediments += 1
         return impediments * 2 + self.estimee1()
 
-    def estimee3(self) -> int:
-        return random.randint(1, 10)
+    def estimee3(self, free_pos: np.ndarray, cars: List[Car]) -> int:
+        space_after_red_car = self.pos[0] + cars[0].length
+        impediments = 0
+        for i, car in enumerate(cars):
+            if car.is_horizontal: continue
+            if car.move_on_index < space_after_red_car: continue
+            space_after_current_car = self.pos[i] + car.length
+            space_before_current_car = self.pos[i] - 1
+
+            def increment_if_inbound_and_occupied(free_pos_mat, space, col):
+                return 0 <= space < 6 and not free_pos_mat[space][col]
+
+            impediments += increment_if_inbound_and_occupied(free_pos, space_after_current_car, car.move_on_index)
+            impediments += increment_if_inbound_and_occupied(free_pos, space_before_current_car, car.move_on_index)
+
+        return impediments + self.estimee2(free_pos, cars)
 
     def __eq__(self, other: 'State') -> bool:
         if not isinstance(other, State):
