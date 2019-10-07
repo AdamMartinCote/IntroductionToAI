@@ -67,6 +67,11 @@ class State:
         return impediments * 2 + self.estimee1()
 
     def estimee3(self, free_pos: np.ndarray, cars: List[Car]) -> int:
+        """
+        Heuristique de prédiction 3
+
+        on utilise comme valeur le nombre d'autos qui empêchent l'auto rouge d'avancer
+        """
         space_after_red_car = self.pos[0] + cars[0].length
         impediments = 0
         for i, car in enumerate(cars):
