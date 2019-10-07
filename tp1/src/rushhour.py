@@ -156,7 +156,6 @@ class RushHour:
     def render(self, state: State) -> None:
         dim = len(self.free_pos)
         grid = np.zeros((dim, dim), dtype=int)
-        # red_car = self.cars[0]
         for idx, car in enumerate(self.cars):
             if car.is_horizontal:
                 for i in range(car.length):
