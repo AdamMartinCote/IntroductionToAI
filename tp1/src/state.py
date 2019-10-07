@@ -1,4 +1,3 @@
-import random
 from typing import List
 
 import numpy as np
@@ -75,16 +74,17 @@ class State:
         space_after_red_car = self.pos[0] + cars[0].length
         impediments = 0
         for i, car in enumerate(cars):
-            if car.is_horizontal: continue
-            if car.move_on_index < space_after_red_car: continue
+            if car.is_horizontal or \
+                    car.move_on_index < space_after_red_car:
+                continue
             space_after_current_car = self.pos[i] + car.length
             space_before_current_car = self.pos[i] - 1
 
-            def increment_if_inbound_and_occupied(free_pos_mat, space, col):
-                return 0 <= space < 6 and not free_pos_mat[space][col]
+            def increment_if_inbound_and_occupied(space, col) -> bool:
+                return 0 <= space < 6 and not free_pos[space][col]
 
-            impediments += increment_if_inbound_and_occupied(free_pos, space_after_current_car, car.move_on_index)
-            impediments += increment_if_inbound_and_occupied(free_pos, space_before_current_car, car.move_on_index)
+            impediments += increment_if_inbound_and_occupied(space_after_current_car, car.move_on_index)
+            impediments += increment_if_inbound_and_occupied(space_before_current_car, car.move_on_index)
 
         return impediments + self.estimee2(free_pos, cars)
 
