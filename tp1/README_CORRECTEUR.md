@@ -21,3 +21,12 @@ Notre méthode de résolution finale est "Astar_prime_prime" qui utilise "estime
 
 Estimee3 utilise les méthodes d'estimation précédentes, mais en y ajoutant un facteur de "blocage" déterminé par
 le nombre de voiture se trouvant entre la voiture rouge et la sortie
+
+## Résultat
+
+Les mesure effectuée montre une amélioration constante du nombre d'états visitées avec les différents algorithmes, ce
+qui démontre que les fonctions d'estimée aide à prendre une meilleur décision
+
+Toutefois, l'utilisation d'estimee3 entraine une perte de performance en terme de temps d'execution. Son utilisation
+est donc appropriée si on veut minimiser le nombre d'états visités, mais si on préfère la rapidité d'exécution, 
+"estimee2" est préférable.
