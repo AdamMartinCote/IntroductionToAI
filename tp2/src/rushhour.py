@@ -4,6 +4,9 @@ import numpy as np
 
 from tp2.src.state import State
 
+FREE = True
+OCCUPIED = False
+
 
 class Rushhour:
 
@@ -16,17 +19,19 @@ class Rushhour:
 
         self.free_pos = None
 
-    def init_positions(self, state):
+    def update_free_pos(self, state):
         self.free_pos = np.ones((6, 6), dtype=bool)
         for i in range(self.nbcars):
             if self.horiz[i]:
-                self.free_pos[self.move_on[i], state.pos[i]:state.pos[i] + self.length[i]] = False
+                self.free_pos[self.move_on[i], state.pos[i]:state.pos[i] + self.length[i]] = OCCUPIED
             else:
-                self.free_pos[state.pos[i]:state.pos[i] + self.length[i], self.move_on[i]] = False
-        # TODO
+                self.free_pos[state.pos[i]:state.pos[i] + self.length[i], self.move_on[i]] = OCCUPIED
+
+        if state.rock:
+            self.free_pos[state.rock[0], state.rock[1]] = OCCUPIED
 
     def possible_moves(self, state) -> List[State]:
-        self.init_positions(state)
+        self.update_free_pos(state)
         new_states = []
         for i in range(self.nbcars):
             if self.horiz[i]:
@@ -44,7 +49,7 @@ class Rushhour:
         return new_states
 
     def possible_rock_moves(self, state) -> List[State]:
-        self.init_positions(state)
+        self.update_free_pos(state)
         new_states = []
         line_idx = [i for i in range(6)]
         col_idx = [i for i in range(6)]
@@ -59,7 +64,11 @@ class Rushhour:
         return new_states
 
     def print_pretty_grid(self, state):
-        self.init_positions(state)
+        grid = self.get_formatted_grid(state)
+        print(grid)
+
+    def get_formatted_grid(self, state) -> List:
+        self.update_free_pos(state)
         grid = np.chararray((6, 6))
         grid[:] = '-'
         for car in range(self.nbcars):
@@ -68,5 +77,6 @@ class Rushhour:
                     grid[self.move_on[car]][pos] = self.color[car][0]
                 else:
                     grid[pos][self.move_on[car]] = self.color[car][0]
-        grid[state.rock] = 'x'
-        print(grid)
+        if state.rock:
+            grid[state.rock] = 'x'
+        return grid
