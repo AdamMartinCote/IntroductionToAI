@@ -21,7 +21,7 @@ class TestState(TestCase):
         s2 = s1.put_rock((3, 2))
 
         print("État initial")
-        self.rh.print_pretty_grid(s0)
+        self.rh.print_pretty_grid_and_update_free_pos(s0)
         print(self.rh.free_pos)
         print('\n')
         grid_reference = np.array(
@@ -43,11 +43,12 @@ class TestState(TestCase):
             dtype='bool'
         )
 
-        np.testing.assert_array_equal(self.rh.get_formatted_grid(s0), grid_reference)
+        self.rh.update_free_pos(s0)
+        np.testing.assert_array_equal(self.rh.get_formatted_grid_and_update_free_pos(s0), grid_reference)
         np.testing.assert_array_equal(self.rh.free_pos, free_pos_reference)
 
         print("Roche 4-4")
-        self.rh.print_pretty_grid(s1)
+        self.rh.print_pretty_grid_and_update_free_pos(s1)
         print(self.rh.free_pos)
         print('\n')
         grid_reference = np.array(
@@ -68,11 +69,10 @@ class TestState(TestCase):
              [False, False, False, False, True, False]],
             dtype='bool'
         )
-        np.testing.assert_array_equal(self.rh.get_formatted_grid(s0), grid_reference)
+        np.testing.assert_array_equal(self.rh.get_formatted_grid_and_update_free_pos(s1), grid_reference)
         np.testing.assert_array_equal(self.rh.free_pos, free_pos_reference)
 
         print("Roche 3-2")
-        self.rh.print_pretty_grid(s2)
         print(self.rh.free_pos)
         print('\n')
         grid_reference = np.array(
@@ -93,7 +93,7 @@ class TestState(TestCase):
              [False, False, False, False, True, False]],
             dtype='bool'
         )
-        np.testing.assert_array_equal(self.rh.get_formatted_grid(s0), grid_reference)
+        np.testing.assert_array_equal(self.rh.get_formatted_grid_and_update_free_pos(s2), grid_reference)
         np.testing.assert_array_equal(self.rh.free_pos, free_pos_reference)
 
     def testPossibleRockMoves(self):

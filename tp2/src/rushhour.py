@@ -63,11 +63,11 @@ class Rushhour:
 
         return new_states
 
-    def print_pretty_grid(self, state):
-        grid = self.get_formatted_grid(state)
+    def print_pretty_grid_and_update_free_pos(self, state):
+        grid = self.get_formatted_grid_and_update_free_pos(state)
         print(grid)
 
-    def get_formatted_grid(self, state) -> List:
+    def get_formatted_grid_and_update_free_pos(self, state) -> List:
         self.update_free_pos(state)
         grid = np.chararray((6, 6))
         grid[:] = '-'
