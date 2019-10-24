@@ -28,7 +28,7 @@ class Rushhour:
                 self.free_pos[state.pos[i]:state.pos[i] + self.length[i], self.move_on[i]] = OCCUPIED
 
         if state.rock:
-            self.free_pos[state.rock[0], state.rock[1]] = OCCUPIED
+            self.free_pos[state.rock[0]][state.rock[1]] = OCCUPIED
 
     def possible_moves(self, state) -> List[State]:
         self.update_free_pos(state)
@@ -54,8 +54,9 @@ class Rushhour:
         line_idx = [i for i in range(6)]
         col_idx = [i for i in range(6)]
         line_idx.remove(2)
-        line_idx.remove(state.rock[0])
-        col_idx.remove(state.rock[1])
+        if state.rock:
+            line_idx.remove(state.rock[0])
+            col_idx.remove(state.rock[1])
         for i in line_idx:
             for j in col_idx:
                 if self.free_pos[i][j]:

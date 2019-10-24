@@ -68,7 +68,7 @@ class TestState(TestCase):
              [False, False, False, False, True, False]],
             dtype='bool'
         )
-        np.testing.assert_array_equal(self.rh.get_formatted_grid(s0), grid_reference)
+        np.testing.assert_array_equal(self.rh.get_formatted_grid(s1), grid_reference)
         np.testing.assert_array_equal(self.rh.free_pos, free_pos_reference)
 
         print("Roche 3-2")
@@ -93,7 +93,7 @@ class TestState(TestCase):
              [False, False, False, False, True, False]],
             dtype='bool'
         )
-        np.testing.assert_array_equal(self.rh.get_formatted_grid(s0), grid_reference)
+        np.testing.assert_array_equal(self.rh.get_formatted_grid(s2), grid_reference)
         np.testing.assert_array_equal(self.rh.free_pos, free_pos_reference)
 
     def testPossibleRockMoves(self):
