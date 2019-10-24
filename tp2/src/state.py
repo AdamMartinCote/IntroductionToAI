@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 import numpy as np
 
 
@@ -11,6 +13,7 @@ class State:
         pos donne la position de la voiture i dans sa ligne ou colonne (première case occupée par la voiture);
         """
         self.pos = np.array(pos)
+
 
         """
         c,d et prev premettent de retracer l'état précédent et le dernier mouvement effectué
@@ -37,9 +40,11 @@ class State:
         # TODO
         return s
 
-    def put_rock(self, rock_pos):
-        # TODO
-        return None
+    def put_rock(self, rock_pos) -> 'State':
+        new_state = deepcopy(self)
+        new_state.prev = self
+        new_state.rock = rock_pos
+        return new_state
 
     def score_state(self):
         # TODO

@@ -1,4 +1,8 @@
+from typing import List
+
 import numpy as np
+
+from tp2.src.state import State
 
 
 class Rushhour:
@@ -21,7 +25,7 @@ class Rushhour:
                 self.free_pos[state.pos[i]:state.pos[i] + self.length[i], self.move_on[i]] = False
         # TODO
 
-    def possible_moves(self, state):
+    def possible_moves(self, state) -> List[State]:
         self.init_positions(state)
         new_states = []
         for i in range(self.nbcars):
@@ -39,10 +43,19 @@ class Rushhour:
                     new_states.append(state.move(i, -1))
         return new_states
 
-    def possible_rock_moves(self, state):
+    def possible_rock_moves(self, state) -> List[State]:
         self.init_positions(state)
         new_states = []
-        # TODO
+        line_idx = [i for i in range(6)]
+        col_idx = [i for i in range(6)]
+        line_idx.remove(2)
+        line_idx.remove(state.rock[0])
+        col_idx.remove(state.rock[1])
+        for i in line_idx:
+            for j in col_idx:
+                if self.free_pos[i][j]:
+                    new_states.append(state.put_rock((i, j,)))
+
         return new_states
 
     def print_pretty_grid(self, state):
