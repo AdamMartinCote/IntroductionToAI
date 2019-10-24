@@ -89,7 +89,7 @@ class TestState(TestCase):
              [False, True, False, False, False, False],
              [False, False, False, False, True, True],
              [True, False, False, False, False, False],
-             [False, False, False, False, False, False],
+             [False, False, False, False, True, False], # Todo: Demander au changé multiple rock à (4,4)
              [False, False, False, False, True, False]],
             dtype='bool'
         )
