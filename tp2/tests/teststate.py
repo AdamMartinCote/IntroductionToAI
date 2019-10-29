@@ -21,6 +21,8 @@ class TestState(TestCase):
         s2 = s1.put_rock((3, 2))
 
         print("État initial")
+
+        self.rh.state = s0
         self.rh.print_pretty_grid_and_update_free_pos(s0)
         print(self.rh.free_pos)
         print('\n')
@@ -43,12 +45,13 @@ class TestState(TestCase):
             dtype='bool'
         )
 
-        self.rh.update_free_pos(s0)
         np.testing.assert_array_equal(self.rh.get_formatted_grid_and_update_free_pos(s0), grid_reference)
         np.testing.assert_array_equal(self.rh.free_pos, free_pos_reference)
 
         print("Roche 4-4")
-        self.rh.print_pretty_grid_and_update_free_pos(s1)
+
+        self.rh.state = s1
+        self.rh.update_free_pos()
         print(self.rh.free_pos)
         print('\n')
         grid_reference = np.array(
@@ -73,6 +76,8 @@ class TestState(TestCase):
         np.testing.assert_array_equal(self.rh.free_pos, free_pos_reference)
 
         print("Roche 3-2")
+
+        self.rh.state = s2
         print(self.rh.free_pos)
         print('\n')
         grid_reference = np.array(
@@ -89,7 +94,7 @@ class TestState(TestCase):
              [False, True, False, False, False, False],
              [False, False, False, False, True, True],
              [True, False, False, False, False, False],
-             [False, False, False, False, True, False], # Todo: Demander au changé multiple rock à (4,4)
+             [False, False, False, False, True, False],  # Todo: Demander au chargé multiple rock à (4,4)
              [False, False, False, False, True, False]],
             dtype='bool'
         )
@@ -98,8 +103,12 @@ class TestState(TestCase):
 
     def testPossibleRockMoves(self):
         s = State([1, 0, 3, 1, 1, 4, 3, 4, 4, 2, 4, 1])
-        sols = self.rh.possible_rock_moves(s)
+        self.rh.state = s
+        sols = self.rh.possible_rock_moves()
         print(len(sols))
+        self.assertEqual(7, len(sols))
         s1 = s.put_rock((3, 4))
-        sols = self.rh.possible_rock_moves(s1)
+        self.rh.state = s1
+        sols = self.rh.possible_rock_moves()
         print(len(sols))
+        self.assertEqual(3, len(sols))
