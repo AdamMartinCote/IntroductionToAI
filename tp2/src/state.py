@@ -2,6 +2,8 @@ from copy import deepcopy
 
 import numpy as np
 
+RED_CAR_POS = 0
+
 
 class State:
     """
@@ -11,9 +13,6 @@ class State:
     def __init__(self, pos):
         """
         pos donne la position de la voiture i dans sa ligne ou colonne (première case occupée par la voiture);
-
-        c,d et prev premettent de retracer l'état précédent et le dernier mouvement effectué
-
         """
         self.pos = np.array(pos)
         self.index_of_last_moved_car = None
@@ -25,11 +24,10 @@ class State:
         # TODO
         self.rock = None
 
-    """
-    Constructeur d'un état à partir du mouvement (c,d)
-    """
-
-    def move(self, c, d):
+    def move(self, c, d) -> 'State':
+        """
+        Constructeur d'un état à partir du mouvement (c,d)
+        """
         s = State(self.pos)
         s.previous_state = self
         s.pos[c] += d
@@ -45,21 +43,29 @@ class State:
         new_state.rock = rock_pos
         return new_state
 
-    def score_state(self):
+    def score_state(self) -> None:
         """
         Elle affecte la valeur de l'état à son paramètre score. L'état n'est
         pas nécessairement final. Utiliser l'heuristique qui vous semble la
         plus pertinente.
         """
-        self.score = 0
+        self.score = self.score_heuristic_1()
 
-    def score_heuristic_1(self) -> float:
+    def score_heuristic_1(self) -> int:
+        """
+        We use the position of the red car to score advancement
+        """
+        return self.pos[RED_CAR_POS]
+
+    def score_heuristic_2(self) -> float:
         """
         We use the ratio between the number of freepos in the left half of the grid
         vs the right half. More freepos on the right is better.
 
         Note: we might have to remove the red car from this score to avoid a bias as
         we move further right
+
+        TODO: Not possible with current structure
         """
         pass
 
