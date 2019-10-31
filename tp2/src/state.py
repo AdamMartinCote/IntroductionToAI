@@ -2,7 +2,7 @@ from copy import deepcopy
 
 import numpy as np
 
-RED_CAR_POS = 0
+RED_CAR_INDEX = 0
 
 
 class State:
@@ -43,19 +43,64 @@ class State:
         new_state.rock = rock_pos
         return new_state
 
-    def score_state(self) -> None:
+    def score_state(self, free_pos) -> None:
         """
         Elle affecte la valeur de l'état à son paramètre score. L'état n'est
         pas nécessairement final. Utiliser l'heuristique qui vous semble la
         plus pertinente.
         """
-        self.score = self.score_heuristic_1()
+        self.score = self.score_heuristic_1(free_pos)
 
-    def score_heuristic_1(self) -> int:
-        """
-        We use the position of the red car to score advancement
-        """
-        return self.pos[RED_CAR_POS]
+    def __did_state_previously_happen(self) -> bool:
+        previous = self.previous_state
+        while previous is not None:
+            if previous.__hash__() is self.__hash__():
+                return True
+        return False
+
+    def __did_red_car_advance(self) -> bool:
+        positive_direction = 1
+        return self.index_of_last_moved_car is RED_CAR_INDEX and self.last_move_direction is positive_direction
+
+    def __did_red_car_backup(self) -> bool:
+        negative_direction = -1
+        return self.index_of_last_moved_car is RED_CAR_INDEX and self.last_move_direction is negative_direction
+
+    def __is_red_car_on_winning_pos(self) -> bool:
+        winning_pos = 4
+        return self.pos[RED_CAR_INDEX] is winning_pos
+
+    def __how_many_cars_touches_rock(self, free_pos: np.ndarray) -> int:
+        def is_inbound(i, j):
+            return 0 <= i <= 5 and 0 <= j <= 5
+
+        x = self.rock[0]
+        y = self.rock[1]
+        count = 1 if is_inbound(x + 1, y) and not free_pos[x + 1][y] else 0
+        count += 1 if is_inbound(x - 1, y) and not free_pos[x - 1][y] else 0
+        count += 1 if is_inbound(x, y + 1) and not free_pos[x][y + 1] else 0
+        count += 1 if is_inbound(x, y - 1) and not free_pos[x][y - 1] else 0
+        return count
+
+    def score_heuristic_1(self, free_pos: np.ndarray) -> int:
+        nothing = 0
+        small_penalty = 25
+        big_penalty = 100
+        big_gain = 100
+        win_gain = 1000
+
+        penalty = nothing
+        gain = nothing
+
+        penalty += big_penalty if self.__did_state_previously_happen() else nothing
+        penalty += big_penalty if self.__did_red_car_backup() else nothing
+        penalty += big_penalty if self.__did_red_car_backup() else nothing
+        penalty += small_penalty * self.__how_many_cars_touches_rock(free_pos)
+
+        gain += big_gain if self.__did_red_car_advance() else nothing
+        gain += win_gain if self.__is_red_car_on_winning_pos() else nothing
+
+        return gain - penalty
 
     def score_heuristic_2(self) -> float:
         """
