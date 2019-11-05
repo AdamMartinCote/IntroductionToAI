@@ -12,12 +12,14 @@ class MiniMaxSearch:
     def minimax_1(self, current_depth: int, current_state: State):
         # todo: je suis vraiment pas certain de ca
 
-        self.rushhour.state = current_state
+        tmp_rushour = copy(self.rushhour)
+
+        tmp_rushour.state = current_state
 
         if current_depth is self.search_depth:
-            return current_state, current_state.score_heuristic_1(self.rushhour.free_pos)
+            return current_state, current_state.score_heuristic_1(tmp_rushour.free_pos)
 
-        possible_states = self.rushhour.possible_moves()
+        possible_states = tmp_rushour.possible_moves()
 
         best_move = None
         best_score = - (sys.maxsize - 1)
@@ -45,7 +47,8 @@ class MiniMaxSearch:
         return best_move
 
     def decide_best_move_1(self):
-        pass  # TODO
+        best_move, best_score = self.minimax_1(self.search_depth, self.current_state)
+        self.state.move(best_move.index_of_last_moved_car, best_move.last_move_direction)
 
     def decide_best_move_2(self, is_max):
         pass  # TODO
