@@ -47,6 +47,7 @@ class MiniMaxSearch:
         return best_move
 
     def decide_best_move_1(self):
+        # todo: this is a try
         best_move, best_score = self.minimax_1(self.search_depth, self.current_state)
         self.state.move(best_move.index_of_last_moved_car, best_move.last_move_direction)
 
