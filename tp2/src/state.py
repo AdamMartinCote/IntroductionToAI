@@ -52,9 +52,10 @@ class State:
         self.score = self.score_heuristic_1(free_pos)
 
     def __did_state_previously_happen(self) -> bool:
-        previous = self.previous_state
-        while previous is not None:
-            if previous.__hash__() is self.__hash__():
+        state = self
+        while state.previous_state is not None:
+            state = state.previous_state
+            if hash(state) is hash(self):
                 return True
         return False
 
