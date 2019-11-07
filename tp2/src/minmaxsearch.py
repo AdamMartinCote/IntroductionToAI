@@ -1,4 +1,5 @@
 import sys
+from copy import deepcopy
 
 from tp2.src.state import State
 
@@ -12,7 +13,7 @@ class MiniMaxSearch:
     def minimax_1(self, current_depth: int, current_state: State):
         # todo: je suis vraiment pas certain de ca
 
-        tmp_rushour = copy(self.rushhour)
+        tmp_rushour = deepcopy(self.rushhour)
 
         tmp_rushour.state = current_state
 

@@ -13,7 +13,7 @@ class State:
     def __init__(self, pos):
         """
         pos donne la position de la voiture i dans sa ligne ou colonne (première case occupée par la voiture);
-        """
+        """ 
         self.pos = np.array(pos)
         self.index_of_last_moved_car = None
         self.last_move_direction = None
@@ -93,7 +93,6 @@ class State:
         gain = nothing
 
         penalty += big_penalty if self.__did_state_previously_happen() else nothing
-        penalty += big_penalty if self.__did_red_car_backup() else nothing
         penalty += big_penalty if self.__did_red_car_backup() else nothing
         penalty += small_penalty * self.__how_many_cars_touches_rock(free_pos)
 
