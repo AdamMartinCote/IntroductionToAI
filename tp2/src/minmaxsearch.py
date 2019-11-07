@@ -7,7 +7,7 @@ from tp2.src.state import State
 class MiniMaxSearch:
     def __init__(self, rushHour, initial_state, search_depth):
         self.rushhour = rushHour
-        self.state = initial_state
+        self.rushhour.state = initial_state
         self.search_depth = search_depth
 
     def minimax_1(self, current_depth: int, current_state: State):
@@ -58,7 +58,7 @@ class MiniMaxSearch:
         """
         # todo: this is a try
         best_move, best_score = self.minimax_1(self.search_depth, self.current_state)
-        self.state.move(best_move.index_of_last_moved_car, best_move.last_move_direction)
+        self.rushhour.state.move(best_move.index_of_last_moved_car, best_move.last_move_direction)
 
     def decide_best_move_2(self, is_max):
         pass  # TODO
