@@ -116,7 +116,7 @@ class State:
         if not isinstance(other, State):
             return NotImplemented
         if len(self.pos) != len(other.pos):
-            print("les états n'ont pas le même nombre de voitures")
+            raise ValueError("les états n'ont pas le même nombre de voitures")
 
         return np.array_equal(self.pos, other.pos)
 
