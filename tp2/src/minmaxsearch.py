@@ -26,20 +26,21 @@ class MiniMaxSearch:
         if hash(current_state) in self.visited:
             return None
 
-        tmp_rushhour: RushHour = self.rushhour
+        self.rushhour
 
-        tmp_rushhour.state = current_state
+        self.rushhour.state = current_state
 
-        possible_states = tmp_rushhour.get_possible_moves()
+        possible_states = self.rushhour.get_possible_moves()
 
         if current_depth is self.search_depth:
-            current_state.score_heuristic_1(tmp_rushhour.free_pos, tmp_rushhour.length,
-                                            tmp_rushhour.move_on, tmp_rushhour.horiz)
+            current_state.score_heuristic_1(self.rushhour.free_pos, self.rushhour.length,
+                                            self.rushhour.move_on, self.rushhour.horiz)
             return current_state
 
         current_state.score = - (sys.maxsize - 1)
         best_state = None
         for possible_state in possible_states:
+            possible_state.previous_state = None
             possible_state.nb_moves -= 1  # because it adds one in get_possible_moves
             tmp_state = self.minimax_1(current_depth + 1, possible_state)
             if tmp_state is None: continue
@@ -75,11 +76,13 @@ class MiniMaxSearch:
         Cette fonction trouve et exécute le meilleur coup pour une partie à un joueur
         """
         # todo: this is a try
+        init_state = self.rushhour.state
         best_move = self.minimax_1(0, self.rushhour.state)
-        self.visited.add(hash(self.rushhour.state))
-        print(self.str_move(True, best_move))
-        print(best_move.score)
-        self.rushhour.state = self.rushhour.state.move(best_move.index_of_last_moved_car,
+        self.rushhour.state = init_state
+        self.rushhour.update_free_pos()
+        self.visited.add(hash(init_state))
+        # print(self.str_move(True, best_move))
+        self.rushhour.state = init_state.move(best_move.index_of_last_moved_car,
                                                        best_move.last_move_direction)
 
     def decide_best_move_2(self, is_max):

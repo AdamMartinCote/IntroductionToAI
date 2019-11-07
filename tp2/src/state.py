@@ -120,7 +120,7 @@ class State:
     def score_heuristic_1(self, free_pos: np.ndarray, length: List[int], move_on: List[int],
                           is_horizontal: List[int]):
         nothing = 0
-        small_penalty = 100
+        small_penalty = 10
         big_penalty = 1000
 
         small_gain = 10
@@ -130,11 +130,11 @@ class State:
         penalty = nothing
         gain = nothing
 
-        penalty += big_penalty * self.__red_car_pos_in_front()
+        # penalty += big_penalty * self.__red_car_pos_in_front()
         penalty += small_penalty * self.__how_many_cars_touches_rock(free_pos)
         penalty += small_penalty * self.__get_impediments(free_pos, length, move_on)
         penalty += small_penalty * self.__get_blocked_cars(free_pos, length, move_on, is_horizontal)
-        penalty += small_penalty * self.nb_moves
+        # penalty += small_penalty * self.nb_moves
         #
         gain += big_gain * self.__red_car_pos_in_back()
         gain += small_gain * self.__get_feeling_score(free_pos)
