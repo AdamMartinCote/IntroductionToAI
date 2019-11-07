@@ -1,4 +1,5 @@
 from copy import deepcopy
+from typing import List
 
 import numpy as np
 
@@ -13,7 +14,7 @@ class State:
     def __init__(self, pos):
         """
         pos donne la position de la voiture i dans sa ligne ou colonne (première case occupée par la voiture);
-        """ 
+        """
         self.pos = np.array(pos)
         self.index_of_last_moved_car = None
         self.last_move_direction = None
@@ -51,7 +52,6 @@ class State:
         """
         self.score = self.score_heuristic_1(free_pos)
 
-
     def __did_red_car_advance(self) -> bool:
         positive_direction = 1
         return self.index_of_last_moved_car is RED_CAR_INDEX and self.last_move_direction is positive_direction
@@ -63,6 +63,15 @@ class State:
     def __is_red_car_on_winning_pos(self) -> bool:
         winning_pos = 4
         return self.pos[RED_CAR_INDEX] is winning_pos
+
+    def __get_impediments(self, free_pos: np.ndarray, length: List[int], move_on: List[int]):
+        red_car = 0
+        space_after_red_car = self.pos[0] + length[0]
+        impediments = 0
+        for i in range(space_after_red_car, len(free_pos[0])):
+            if not free_pos[move_on[red_car]][i]:
+                impediments += 1
+        return impediments
 
     def __how_many_cars_touches_rock(self, free_pos: np.ndarray) -> int:
         if not self.rock:
@@ -79,11 +88,11 @@ class State:
         count += 1 if is_inbound(x, y - 1) and not free_pos[x][y - 1] else 0
         return count
 
-    def score_heuristic_1(self, free_pos: np.ndarray) -> int:
+    def score_heuristic_1(self, free_pos: np.ndarray, length: List[int], move_on: List[int]) -> int:
         nothing = 0
         small_penalty = 25
         big_penalty = 100
-        big_gain = 100
+        big_gain = 500
         win_gain = 1000
 
         penalty = nothing
@@ -91,6 +100,7 @@ class State:
 
         penalty += big_penalty if self.__did_red_car_backup() else nothing
         penalty += small_penalty * self.__how_many_cars_touches_rock(free_pos)
+        penalty += small_penalty * self.__get_impediments(free_pos, length, move_on)
 
         gain += big_gain if self.__did_red_car_advance() else nothing
         gain += win_gain if self.__is_red_car_on_winning_pos() else nothing

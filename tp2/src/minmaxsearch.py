@@ -1,11 +1,10 @@
 import sys
-from typing import Set
 from copy import deepcopy
 
 from tp2.src.rushhour import RushHour
 from tp2.src.state import State
 
-MAX_RECURSION = 100
+MAX_RECURSION = 500
 
 
 class MiniMaxSearch:
@@ -27,14 +26,15 @@ class MiniMaxSearch:
         # todo: je suis vraiment pas certain de ca
         if hash(current_state) in self.visited:
             return None, None
-        tmp_rushhour: RushHour = deepcopy(self.rushhour)
+        tmp_rushhour: RushHour = self.rushhour
 
         tmp_rushhour.state = current_state
 
         possible_states = tmp_rushhour.get_possible_moves()
 
         if current_depth is self.search_depth:
-            return current_state, current_state.score_heuristic_1(tmp_rushhour.free_pos)
+            return current_state, current_state.score_heuristic_1(tmp_rushhour.free_pos, tmp_rushhour.length,
+                                                                  tmp_rushhour.move_on)
 
         best_move = None
         best_score = - (sys.maxsize - 1)
