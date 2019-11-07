@@ -40,12 +40,12 @@ class MiniMaxSearch:
         current_state.score = - (sys.maxsize - 1)
         best_state = None
         for possible_state in possible_states:
+            possible_state.nb_moves -= 1  # because it adds one in get_possible_moves
             tmp_state = self.minimax_1(current_depth + 1, possible_state)
             if tmp_state is None: continue
             if current_state.score < tmp_state.score:
                 current_state.score = tmp_state.score
                 best_state = tmp_state
-
 
         return best_state if current_depth is 0 else current_state
 
@@ -78,6 +78,7 @@ class MiniMaxSearch:
         best_move = self.minimax_1(0, self.rushhour.state)
         self.visited.add(hash(self.rushhour.state))
         print(self.str_move(True, best_move))
+
         self.rushhour.state = self.rushhour.state.move(best_move.index_of_last_moved_car,
                                                        best_move.last_move_direction)
 
