@@ -13,14 +13,14 @@ class MiniMaxSearch:
     def minimax_1(self, current_depth: int, current_state: State):
         # todo: je suis vraiment pas certain de ca
 
-        tmp_rushour = deepcopy(self.rushhour)
+        tmp_rushhour = deepcopy(self.rushhour)
 
-        tmp_rushour.state = current_state
+        tmp_rushhour.state = current_state
 
         if current_depth is self.search_depth:
-            return current_state, current_state.score_heuristic_1(tmp_rushour.free_pos)
+            return current_state, current_state.score_heuristic_1(tmp_rushhour.free_pos)
 
-        possible_states = tmp_rushour.possible_moves()
+        possible_states = tmp_rushhour.possible_moves()
 
         best_move = None
         best_score = - (sys.maxsize - 1)
