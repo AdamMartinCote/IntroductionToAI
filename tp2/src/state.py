@@ -34,7 +34,7 @@ class State:
         s.index_of_last_moved_car = c
         s.last_move_direction = d
         s.nb_moves = self.nb_moves + 1
-        # TODO
+        s.rock = self.rock
         return s
 
     def put_rock(self, rock_pos) -> 'State':

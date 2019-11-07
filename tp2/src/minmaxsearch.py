@@ -57,7 +57,7 @@ class MiniMaxSearch:
         Cette fonction trouve et exécute le meilleur coup pour une partie à un joueur
         """
         # todo: this is a try
-        best_move, best_score = self.minimax_1(self.search_depth, self.current_state)
+        best_move, best_score = self.minimax_1(self.search_depth, self.rushhour.state)
         self.rushhour.state.move(best_move.index_of_last_moved_car, best_move.last_move_direction)
 
     def decide_best_move_2(self, is_max):
@@ -76,7 +76,7 @@ class MiniMaxSearch:
     def solve_2(self, state):
         pass
 
-    def print_move(self, is_car, state):
+    def str_move(self, is_car, state):
         message = ''
         if is_car:
             car_index = state.index_of_last_moved_car
@@ -85,12 +85,12 @@ class MiniMaxSearch:
             d = state.last_move_direction
             dir = ''
             if is_horiz:
-                dir = 'bas' if d is 1 else 'haut'
+                dir = 'la droite' if d is 1 else 'la gauche'
             else:
-                dir = 'droite' if d is 1 else 'gauche'
-            message = f'Voiture {color} vers le {dir}'
+                dir = 'le bas' if d is 1 else 'la droite'
+            message = f'Voiture {color} vers {dir}'
         else:
             rock = state.rock
             message = f'Roche dans la case {rock[0]}-{rock[1]}'
 
-        print(message)
+        return message
