@@ -61,8 +61,12 @@ class MiniMaxSearch:
     def decide_best_move_expectimax(self, is_max):
         pass  # TODO
 
-    def solve(self, state, is_singleplayer):
-        pass  # TODO
+    def solve_1(self, state):
+        while not state.success():
+            self.decide_best_move_1()
+
+    def solve_2(self, state):
+        pass
 
     def print_move(self, is_max, state):
         pass  # TODO
