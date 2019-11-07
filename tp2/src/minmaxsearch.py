@@ -1,5 +1,4 @@
 import sys
-from copy import deepcopy
 
 from tp2.src.rushhour import RushHour
 from tp2.src.state import State
@@ -87,11 +86,12 @@ class MiniMaxSearch:
     def decide_best_move_expectimax(self, is_max):
         pass  # TODO
 
-    def solve_1(self):
+    def solve_1(self, verbose=True):
         while not self.rushhour.state.success():
             self.decide_best_move_1()
             s = self.str_move(True, self.rushhour.state)
-            print(s)
+            if verbose:
+                print(s)
 
     def solve_2(self, state):
         pass
