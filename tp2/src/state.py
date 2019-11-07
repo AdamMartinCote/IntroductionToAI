@@ -71,6 +71,9 @@ class State:
         return self.pos[RED_CAR_INDEX] is winning_pos
 
     def __how_many_cars_touches_rock(self, free_pos: np.ndarray) -> int:
+        if not self.rock:
+            return 0
+
         def is_inbound(i, j):
             return 0 <= i <= 5 and 0 <= j <= 5
 

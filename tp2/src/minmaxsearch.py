@@ -1,6 +1,7 @@
 import sys
 from copy import deepcopy
 
+from tp2.src.rushhour import RushHour
 from tp2.src.state import State
 
 
@@ -18,14 +19,14 @@ class MiniMaxSearch:
         """
         # todo: je suis vraiment pas certain de ca
 
-        tmp_rushhour = deepcopy(self.rushhour)
+        tmp_rushhour: RushHour = deepcopy(self.rushhour)
 
         tmp_rushhour.state = current_state
 
         if current_depth is self.search_depth:
             return current_state, current_state.score_heuristic_1(tmp_rushhour.free_pos)
 
-        possible_states = tmp_rushhour.possible_moves()
+        possible_states = tmp_rushhour.get_possible_moves()
 
         best_move = None
         best_score = - (sys.maxsize - 1)
@@ -63,8 +64,9 @@ class MiniMaxSearch:
         Cette fonction trouve et exécute le meilleur coup pour une partie à un joueur
         """
         # todo: this is a try
-        best_move, best_score = self.minimax_1(self.search_depth, self.rushhour.state)
-        self.rushhour.state.move(best_move.index_of_last_moved_car, best_move.last_move_direction)
+        best_move, best_score = self.minimax_1(0, self.rushhour.state)
+        self.rushhour.state.move(best_move.index_of_last_moved_car,
+                                 best_move.last_move_direction)
 
     def decide_best_move_2(self, is_max):
         pass  # TODO
