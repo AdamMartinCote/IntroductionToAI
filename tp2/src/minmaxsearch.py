@@ -10,7 +10,7 @@ class MiniMaxSearch:
         self.rushhour.state = initial_state
         self.search_depth = search_depth
 
-    def minimax_1(self, current_depth: int, current_state: State):
+    def minimax_1(self, current_depth: int, current_state: State) -> (int, int):
         """
         Cette fonction contient la logique de l'algorithme minimax pour un
         seul joueur et retourne le meilleur coup à prendre à partir de l'état
