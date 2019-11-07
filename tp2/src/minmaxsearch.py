@@ -4,9 +4,14 @@ from copy import deepcopy
 from tp2.src.rushhour import RushHour
 from tp2.src.state import State
 
+MAX_RECURSION = 100
+
 
 class MiniMaxSearch:
     def __init__(self, rushHour, initial_state, search_depth):
+
+        sys.setrecursionlimit(MAX_RECURSION)
+
         self.rushhour = rushHour
         self.rushhour.state = initial_state
         self.search_depth = search_depth
