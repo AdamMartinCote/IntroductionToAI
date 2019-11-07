@@ -16,7 +16,7 @@ class MiniMaxSearch:
         self.search_depth = search_depth
         self.visited = set()
 
-    def minimax_1(self, current_depth: int, current_state: State) -> (int, int):
+    def minimax_1(self, current_depth: int, current_state: State) -> State or None:
         """
         Cette fonction contient la logique de l'algorithme minimax pour un
         seul joueur et retourne le meilleur coup à prendre à partir de l'état
@@ -24,7 +24,8 @@ class MiniMaxSearch:
         """
         # todo: je suis vraiment pas certain de ca
         if hash(current_state) in self.visited:
-            return None, None
+            return None
+
         tmp_rushhour: RushHour = self.rushhour
 
         tmp_rushhour.state = current_state
@@ -32,19 +33,21 @@ class MiniMaxSearch:
         possible_states = tmp_rushhour.get_possible_moves()
 
         if current_depth is self.search_depth:
-            return current_state, current_state.score_heuristic_1(tmp_rushhour.free_pos, tmp_rushhour.length,
-                                                                  tmp_rushhour.move_on, tmp_rushhour.horiz)
+            current_state.score_heuristic_1(tmp_rushhour.free_pos, tmp_rushhour.length,
+                                            tmp_rushhour.move_on, tmp_rushhour.horiz)
+            return current_state
 
-        best_move = None
-        best_score = - (sys.maxsize - 1)
+        current_state.score = - (sys.maxsize - 1)
+        best_state = None
         for possible_state in possible_states:
-            tmp_move, tmp_score = self.minimax_1(current_depth + 1, possible_state)
-            if tmp_move is None and tmp_score is None: continue
-            if tmp_score > best_score:
-                best_score = tmp_score
-                best_move = tmp_move
+            tmp_state = self.minimax_1(current_depth + 1, possible_state)
+            if tmp_state is None: continue
+            if current_state.score < tmp_state.score:
+                current_state.score = tmp_state.score
+                best_state = tmp_state
 
-        return best_move, best_score
+
+        return best_state if current_depth is 0 else current_state
 
     def min_value(self, current_depth, current_state):
         pass
@@ -72,7 +75,7 @@ class MiniMaxSearch:
         Cette fonction trouve et exécute le meilleur coup pour une partie à un joueur
         """
         # todo: this is a try
-        best_move, best_score = self.minimax_1(0, self.rushhour.state)
+        best_move = self.minimax_1(0, self.rushhour.state)
         self.visited.add(hash(self.rushhour.state))
         print(self.str_move(True, best_move))
         self.rushhour.state = self.rushhour.state.move(best_move.index_of_last_moved_car,

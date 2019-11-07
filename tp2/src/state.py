@@ -108,7 +108,7 @@ class State:
         return count
 
     def score_heuristic_1(self, free_pos: np.ndarray, length: List[int], move_on: List[int],
-                          is_horizontal: List[int]) -> int:
+                          is_horizontal: List[int]):
         nothing = 0
         small_penalty = 50
         big_penalty = 100
@@ -127,7 +127,7 @@ class State:
         gain += big_gain if self.__did_red_car_advance() else nothing
         gain += win_gain if self.__is_red_car_on_winning_pos() else nothing
 
-        return gain - penalty
+        self.score = gain - penalty
 
     def score_heuristic_2(self) -> float:
         """
