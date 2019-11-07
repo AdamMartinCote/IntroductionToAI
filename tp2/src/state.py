@@ -51,13 +51,6 @@ class State:
         """
         self.score = self.score_heuristic_1(free_pos)
 
-    def __did_state_previously_happen(self) -> bool:
-        state = self
-        while state.previous_state is not None:
-            state = state.previous_state
-            if hash(state) is hash(self):
-                return True
-        return False
 
     def __did_red_car_advance(self) -> bool:
         positive_direction = 1
@@ -96,7 +89,6 @@ class State:
         penalty = nothing
         gain = nothing
 
-        # penalty += big_penalty if self.__did_state_previously_happen() else nothing
         penalty += big_penalty if self.__did_red_car_backup() else nothing
         penalty += small_penalty * self.__how_many_cars_touches_rock(free_pos)
 

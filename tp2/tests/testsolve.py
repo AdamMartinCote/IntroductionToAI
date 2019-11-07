@@ -18,5 +18,5 @@ class TestSolve(TestCase):
         rush_hour.state = State(state_data_1)
         algo = MiniMaxSearch(rush_hour, rush_hour.state, 1)
         algo.rushhour.update_free_pos()
-        algo.solve_1(rush_hour.state)
+        algo.solve_1()
         print(rush_hour.state.nb_moves)

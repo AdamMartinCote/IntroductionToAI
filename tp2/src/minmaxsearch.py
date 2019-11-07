@@ -1,4 +1,5 @@
 import sys
+from typing import Set
 from copy import deepcopy
 
 from tp2.src.rushhour import RushHour
@@ -10,6 +11,7 @@ class MiniMaxSearch:
         self.rushhour = rushHour
         self.rushhour.state = initial_state
         self.search_depth = search_depth
+        self.visited = set()
 
     def minimax_1(self, current_depth: int, current_state: State) -> (int, int):
         """
@@ -18,20 +20,22 @@ class MiniMaxSearch:
         courant
         """
         # todo: je suis vraiment pas certain de ca
-
+        if hash(current_state) in self.visited:
+            return None, None
         tmp_rushhour: RushHour = deepcopy(self.rushhour)
 
         tmp_rushhour.state = current_state
 
+        possible_states = tmp_rushhour.get_possible_moves()
+
         if current_depth is self.search_depth:
             return current_state, current_state.score_heuristic_1(tmp_rushhour.free_pos)
-
-        possible_states = tmp_rushhour.get_possible_moves()
 
         best_move = None
         best_score = - (sys.maxsize - 1)
         for possible_state in possible_states:
             tmp_move, tmp_score = self.minimax_1(current_depth + 1, possible_state)
+            if tmp_move is None and tmp_score is None: continue
             if tmp_score > best_score:
                 best_score = tmp_score
                 best_move = tmp_move
@@ -65,8 +69,9 @@ class MiniMaxSearch:
         """
         # todo: this is a try
         best_move, best_score = self.minimax_1(0, self.rushhour.state)
+        self.visited.add(hash(self.rushhour.state))
         self.rushhour.state = self.rushhour.state.move(best_move.index_of_last_moved_car,
-                                 best_move.last_move_direction)
+                                                       best_move.last_move_direction)
 
     def decide_best_move_2(self, is_max):
         pass  # TODO
@@ -77,8 +82,8 @@ class MiniMaxSearch:
     def decide_best_move_expectimax(self, is_max):
         pass  # TODO
 
-    def solve_1(self, state):
-        while not state.success():
+    def solve_1(self):
+        while not self.rushhour.state.success():
             self.decide_best_move_1()
             s = self.str_move(True, self.rushhour.state)
             print(s)
