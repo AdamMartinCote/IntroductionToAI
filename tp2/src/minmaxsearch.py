@@ -37,6 +37,12 @@ class MiniMaxSearch:
 
         return best_move, best_score
 
+    def min_value(self, current_depth, current_state):
+        pass
+
+    def max_value(self, current_depth, current_state):
+        pass
+
     def minimax_2(self, current_depth, current_state, is_max):
         # TODO
         best_move = None
@@ -79,7 +85,7 @@ class MiniMaxSearch:
     def str_move(self, is_car, state):
         message = ''
         if is_car:
-            car_index = state.index_of_last_moved_car
+            car_index = state.index_of_last_move2d_car
             color = self.rushhour.color[car_index]
             is_horiz = self.rushhour.horiz[car_index]
             d = state.last_move_direction
