@@ -78,7 +78,7 @@ class MiniMaxSearch:
         best_move = self.minimax_1(0, self.rushhour.state)
         self.visited.add(hash(self.rushhour.state))
         print(self.str_move(True, best_move))
-
+        print(best_move.score)
         self.rushhour.state = self.rushhour.state.move(best_move.index_of_last_moved_car,
                                                        best_move.last_move_direction)
 
