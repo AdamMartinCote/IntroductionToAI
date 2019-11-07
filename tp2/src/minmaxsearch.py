@@ -34,7 +34,7 @@ class MiniMaxSearch:
 
         if current_depth is self.search_depth:
             return current_state, current_state.score_heuristic_1(tmp_rushhour.free_pos, tmp_rushhour.length,
-                                                                  tmp_rushhour.move_on)
+                                                                  tmp_rushhour.move_on, tmp_rushhour.horiz)
 
         best_move = None
         best_score = - (sys.maxsize - 1)

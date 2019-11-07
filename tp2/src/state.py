@@ -64,13 +64,32 @@ class State:
         winning_pos = 4
         return self.pos[RED_CAR_INDEX] is winning_pos
 
-    def __get_impediments(self, free_pos: np.ndarray, length: List[int], move_on: List[int]):
+    def __get_impediments(self, free_pos: np.ndarray, length: List[int], move_on: List[int]) -> int:
         red_car = 0
         space_after_red_car = self.pos[0] + length[0]
         impediments = 0
         for i in range(space_after_red_car, len(free_pos[0])):
             if not free_pos[move_on[red_car]][i]:
                 impediments += 1
+        return impediments
+
+    def __get_blocked_cars(self, free_pos: np.ndarray, length: List[int], move_on: List[int],
+                           is_horizontal: List[int]) -> int:
+
+        space_after_red_car = self.pos[0] + length[0]
+        impediments = 0
+        for i, (l, m_o, i_h) in enumerate(zip(length, move_on, is_horizontal)):
+            if i_h or m_o < space_after_red_car:
+                continue
+            space_after_current_car = self.pos[i] + l
+            space_before_current_car = self.pos[i] - 1
+
+            def increment_if_inbound_and_occupied(space, col) -> bool:
+                return 0 <= space < 6 and not free_pos[space][col]
+
+            impediments += increment_if_inbound_and_occupied(space_after_current_car, m_o)
+            impediments += increment_if_inbound_and_occupied(space_before_current_car, m_o)
+
         return impediments
 
     def __how_many_cars_touches_rock(self, free_pos: np.ndarray) -> int:
@@ -88,9 +107,10 @@ class State:
         count += 1 if is_inbound(x, y - 1) and not free_pos[x][y - 1] else 0
         return count
 
-    def score_heuristic_1(self, free_pos: np.ndarray, length: List[int], move_on: List[int]) -> int:
+    def score_heuristic_1(self, free_pos: np.ndarray, length: List[int], move_on: List[int],
+                          is_horizontal: List[int]) -> int:
         nothing = 0
-        small_penalty = 25
+        small_penalty = 50
         big_penalty = 100
         big_gain = 500
         win_gain = 1000
@@ -101,6 +121,7 @@ class State:
         penalty += big_penalty if self.__did_red_car_backup() else nothing
         penalty += small_penalty * self.__how_many_cars_touches_rock(free_pos)
         penalty += small_penalty * self.__get_impediments(free_pos, length, move_on)
+        penalty += small_penalty * self.__get_blocked_cars(free_pos, length, move_on, is_horizontal)
 
         gain += big_gain if self.__did_red_car_advance() else nothing
         gain += win_gain if self.__is_red_car_on_winning_pos() else nothing
