@@ -65,7 +65,7 @@ class MiniMaxSearch:
         """
         # todo: this is a try
         best_move, best_score = self.minimax_1(0, self.rushhour.state)
-        self.rushhour.state.move(best_move.index_of_last_moved_car,
+        self.rushhour.state = self.rushhour.state.move(best_move.index_of_last_moved_car,
                                  best_move.last_move_direction)
 
     def decide_best_move_2(self, is_max):
@@ -80,6 +80,8 @@ class MiniMaxSearch:
     def solve_1(self, state):
         while not state.success():
             self.decide_best_move_1()
+            s = self.str_move(True, self.rushhour.state)
+            print(s)
 
     def solve_2(self, state):
         pass
@@ -87,7 +89,7 @@ class MiniMaxSearch:
     def str_move(self, is_car, state):
         message = ''
         if is_car:
-            car_index = state.index_of_last_move2d_car
+            car_index = state.index_of_last_moved_car
             color = self.rushhour.color[car_index]
             is_horiz = self.rushhour.horiz[car_index]
             d = state.last_move_direction
@@ -95,7 +97,7 @@ class MiniMaxSearch:
             if is_horiz:
                 dir = 'la droite' if d is 1 else 'la gauche'
             else:
-                dir = 'le bas' if d is 1 else 'la droite'
+                dir = 'le bas' if d is 1 else 'le haut'
             message = f'Voiture {color} vers {dir}'
         else:
             rock = state.rock

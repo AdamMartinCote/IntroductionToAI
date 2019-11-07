@@ -95,7 +95,7 @@ class State:
         penalty = nothing
         gain = nothing
 
-        penalty += big_penalty if self.__did_state_previously_happen() else nothing
+        # penalty += big_penalty if self.__did_state_previously_happen() else nothing
         penalty += big_penalty if self.__did_red_car_backup() else nothing
         penalty += small_penalty * self.__how_many_cars_touches_rock(free_pos)
 
