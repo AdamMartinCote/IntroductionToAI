@@ -1,3 +1,5 @@
+import random
+from copy import copy
 from unittest import TestCase
 
 import numpy as np
@@ -112,3 +114,25 @@ class TestState(TestCase):
         sols = self.rh.possible_rock_moves()
         print(len(sols))
         self.assertEqual(3, len(sols))
+
+    def test_hash_function(self):
+        s0 = State([random.randint(1, 10) for i in range(12)])
+        s1 = State([random.randint(1, 10) for i in range(12)])
+        s2 = State([random.randint(1, 10) for i in range(12)])
+
+        s0_copy = copy(s0)
+        s1_copy = copy(s1)
+        s2_copy = copy(s2)
+
+        self.assertEqual(hash(s0), hash(s0_copy))
+        self.assertEqual(hash(s1), hash(s1_copy))
+        self.assertEqual(hash(s2), hash(s2_copy))
+
+        self.assertNotEqual(hash(s0), hash(s1))
+        self.assertNotEqual(hash(s0), hash(s2))
+
+        self.assertNotEqual(hash(s1), hash(s0))
+        self.assertNotEqual(hash(s1), hash(s2))
+
+        self.assertNotEqual(hash(s2), hash(s0))
+        self.assertNotEqual(hash(s2), hash(s1))
