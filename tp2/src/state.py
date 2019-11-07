@@ -122,6 +122,7 @@ class State:
         penalty += small_penalty * self.__how_many_cars_touches_rock(free_pos)
         penalty += small_penalty * self.__get_impediments(free_pos, length, move_on)
         penalty += small_penalty * self.__get_blocked_cars(free_pos, length, move_on, is_horizontal)
+        penalty += self.nb_moves * small_penalty
 
         gain += big_gain if self.__did_red_car_advance() else nothing
         gain += win_gain if self.__is_red_car_on_winning_pos() else nothing
