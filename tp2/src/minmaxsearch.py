@@ -76,5 +76,21 @@ class MiniMaxSearch:
     def solve_2(self, state):
         pass
 
-    def print_move(self, is_max, state):
-        pass  # TODO
+    def print_move(self, is_car, state):
+        message = ''
+        if is_car:
+            car_index = state.index_of_last_moved_car
+            color = self.rushhour.color[car_index]
+            is_horiz = self.rushhour.horiz[car_index]
+            d = state.last_move_direction
+            dir = ''
+            if is_horiz:
+                dir = 'bas' if d is 1 else 'haut'
+            else:
+                dir = 'droite' if d is 1 else 'gauche'
+            message = f'Voiture {color} vers le {dir}'
+        else:
+            rock = state.rock
+            message = f'Roche dans la case {rock[0]}-{rock[1]}'
+
+        print(message)
