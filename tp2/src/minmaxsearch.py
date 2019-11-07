@@ -11,6 +11,11 @@ class MiniMaxSearch:
         self.search_depth = search_depth
 
     def minimax_1(self, current_depth: int, current_state: State):
+        """
+        Cette fonction contient la logique de l'algorithme minimax pour un
+        seul joueur et retourne le meilleur coup à prendre à partir de l'état
+        courant
+        """
         # todo: je suis vraiment pas certain de ca
 
         tmp_rushhour = deepcopy(self.rushhour)
@@ -48,6 +53,9 @@ class MiniMaxSearch:
         return best_move
 
     def decide_best_move_1(self):
+        """
+        Cette fonction trouve et exécute le meilleur coup pour une partie à un joueur
+        """
         # todo: this is a try
         best_move, best_score = self.minimax_1(self.search_depth, self.current_state)
         self.state.move(best_move.index_of_last_moved_car, best_move.last_move_direction)

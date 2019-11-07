@@ -8,7 +8,7 @@ FREE = True
 OCCUPIED = False
 
 
-class Rushhour:
+class RushHour:
 
     def __init__(self, horiz, length, move_on, color=None, initial_state=None):
         self.nbcars = len(horiz)
@@ -33,7 +33,7 @@ class Rushhour:
         if self.state.rock:
             self.free_pos[self.state.rock[0]][self.state.rock[1]] = OCCUPIED
 
-    def possible_moves(self) -> List[State]:
+    def get_possible_moves(self) -> List[State]:
         self.update_free_pos()
         new_states = []
         for i in range(self.nbcars):
