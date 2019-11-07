@@ -2,13 +2,13 @@ from unittest import TestCase
 
 import numpy as np
 
-from tp2.src.rushhour import Rushhour
+from tp2.src.rushhour import RushHour
 from tp2.src.state import State
 
 
 class TestState(TestCase):
     def setUp(self) -> None:
-        self.rh = Rushhour([True, False, True, False, False, True, False, True, False, True, False, True],
+        self.rh = RushHour([True, False, True, False, False, True, False, True, False, True, False, True],
                            [2, 2, 3, 2, 3, 2, 2, 2, 2, 2, 2, 3],
                            [2, 2, 0, 0, 3, 1, 1, 3, 0, 4, 5, 5],
                            ["rouge", "vert clair", "jaune", "orange", "violet clair", "bleu ciel", "rose", "violet",
