@@ -105,6 +105,7 @@ class MiniMaxSearch:
         pass
 
     def str_move(self, is_car, state):
+        self.rushhour.plot_free_pos()
         message = ''
         if is_car:
             car_index = state.index_of_last_moved_car

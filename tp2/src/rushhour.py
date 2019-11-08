@@ -84,3 +84,8 @@ class RushHour:
         if state.rock:
             grid[state.rock] = 'x'
         return grid
+
+    def plot_free_pos(self):
+        import matplotlib.pyplot as plt
+        plt.imshow(self.free_pos)
+        plt.show()
