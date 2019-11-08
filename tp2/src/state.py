@@ -72,11 +72,12 @@ class State:
 
     @staticmethod
     def __get_feeling_score(free_pos):
+        x = [2, 1, -1, 2, 3, 4]
         score = 0
         for i in range(6):
             for j in range(6):
                 if not free_pos[i][j]:
-                    score += (6 - j) + abs(i - 2) + 1
+                    score += (6 - j) + x[i]
         return score
 
     def __get_blocked_cars(self, free_pos: np.ndarray, length: List[int], move_on: List[int],
@@ -116,31 +117,31 @@ class State:
     def score_heuristic_1(self, visited, free_pos: np.ndarray, length: List[int], move_on: List[int],
                           is_horizontal: List[int]):
         nothing = 0
-        small_penalty = 10
+        small_penalty = 100
         big_penalty = 1000
-        visited_penalty = 20000
+        visited_penalty = 10000
+        move_penalty = 100
 
-        small_gain = 100
+        small_gain = 1
         big_gain = 1000
-        win_gain = 100000
+        win_gain = 10000000
 
         penalty = nothing
         gain = nothing
 
         # penalty += big_penalty * self.__red_car_pos_in_front()
-        penalty += visited_penalty if hash(self) in visited else nothing
-        penalty += big_penalty * self.__get_impediments(free_pos, length, move_on)
+        # penalty += visited[hash(self)] * visited_penalty if hash(self) in visited else nothing
+        penalty += small_penalty * self.__get_impediments(free_pos, length, move_on)
         penalty += small_penalty * self.__how_many_cars_touches_rock(free_pos)
         penalty += small_penalty * self.__get_blocked_cars(free_pos, length, move_on, is_horizontal)
-        penalty += small_penalty * self.nb_moves
-        #
+        penalty += move_penalty * self.nb_moves
+
         gain += big_gain * self.__red_car_pos_in_back()
         gain += small_gain * self.__get_feeling_score(free_pos)
         gain += win_gain if self.success() else nothing
 
         self.score = gain - penalty
         # print(self.score)
-
 
     def score_heuristic_2(self) -> float:
         """

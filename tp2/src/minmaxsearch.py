@@ -13,7 +13,7 @@ class MiniMaxSearch:
         self.rushhour = rushHour
         self.rushhour.state = initial_state
         self.search_depth = search_depth
-        self.visited = set()
+        self.visited = dict()
 
     def minimax_1(self, current_depth: int, current_state: State) -> State or None:
         """
@@ -21,14 +21,15 @@ class MiniMaxSearch:
         seul joueur et retourne le meilleur coup à prendre à partir de l'état
         courant
         """
-        # if hash(current_state) in self.visited:
-        #     return None
-
-        self.rushhour
+        if hash(current_state) in self.visited:
+            return None
 
         self.rushhour.state = current_state
 
         possible_states = self.rushhour.get_possible_moves()
+
+        if current_state.success():
+            print()
 
         if current_depth is self.search_depth or current_state.success():
             current_state.score_heuristic_1(self.visited, self.rushhour.free_pos, self.rushhour.length,
@@ -45,7 +46,6 @@ class MiniMaxSearch:
             if current_state.score < tmp_state.score:
                 current_state.score = tmp_state.score
                 best_state = tmp_state
-
         return best_state if current_depth is 0 else current_state
 
     def min_value(self, current_depth, current_state):
@@ -78,7 +78,10 @@ class MiniMaxSearch:
         best_move = self.minimax_1(0, self.rushhour.state)
         self.rushhour.state = init_state
         self.rushhour.update_free_pos()
-        self.visited.add(hash(init_state))
+        if hash(init_state) not in self.visited:
+            self.visited[hash(init_state)] = 1
+        else:
+            self.visited[hash(init_state)] += 1
         # print(self.str_move(True, best_move))
         self.rushhour.state = init_state.move(best_move.index_of_last_moved_car,
                                               best_move.last_move_direction)
