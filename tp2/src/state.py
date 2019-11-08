@@ -142,16 +142,16 @@ class State:
     def score_heuristic_1(self, visited, free_pos: np.ndarray, length: List[int], move_on: List[int],
                           is_horizontal: List[int]):
         nothing = 0
-        small_penalty = 100
+        small_penalty = 1000
         rock_touch_penalty = 100
         rock_block_penalty = 1000
 
         visited_penalty = 100000
-        move_penalty = 100
+        move_penalty = 10000
 
         small_gain = 1
         big_gain = 1000
-        win_gain = 10000000000
+        win_gain = 10000000000000
 
         penalty = nothing
         gain = nothing
@@ -172,17 +172,38 @@ class State:
         self.score = gain - penalty
         # print(self.score)
 
-    def score_heuristic_2(self) -> float:
-        """
-        We use the ratio between the number of freepos in the left half of the grid
-        vs the right half. More freepos on the right is better.
+    def score_heuristic_2(self, visited, free_pos: np.ndarray, length: List[int], move_on: List[int],
+                          is_horizontal: List[int]):
+        nothing = 0
+        small_penalty = 10
+        rock_touch_penalty = 1000
+        rock_block_penalty = 10000
 
-        Note: we might have to remove the red car from this score to avoid a bias as
-        we move further right
+        visited_penalty = 100000
+        move_penalty = 10
 
-        TODO: Not possible with current structure
-        """
-        pass
+        small_gain = 1
+        big_gain = 1000
+        win_gain = 10000000000
+
+        penalty = nothing
+        gain = nothing
+
+        # penalty += big_penalty * self.__red_car_pos_in_front()
+        penalty += visited[hash(self)] * visited_penalty if hash(self) in visited else nothing
+        penalty += small_penalty * self.__get_impediments(free_pos, length, move_on)
+        penalty += rock_touch_penalty * self.__how_many_cars_touches_rock(free_pos)
+        penalty += rock_block_penalty * self.__how_many_car_positions_blocked_by_rock(length, move_on, is_horizontal)
+        penalty += small_penalty * self.__get_blocked_cars(free_pos, length, move_on, is_horizontal)
+        # penalty += move_penalty * self.nb_moves
+
+        gain += big_gain * self.__red_car_pos_in_back()
+        gain += small_gain * self.__get_feeling_score(free_pos)
+        gain += small_gain * self.__score_len_3_vertical_cars(length, is_horizontal)
+        gain += win_gain if self.success() else nothing
+
+        self.score = gain - penalty
+        # print(self.score)
 
     def success(self):
         return self.pos[0] == 4

@@ -21,25 +21,29 @@ class MiniMaxSearch:
         seul joueur et retourne le meilleur coup à prendre à partir de l'état
         courant
         """
-
         self.rushhour.state = current_state
 
         possible_states = self.rushhour.get_possible_moves()
+        current_state.score_heuristic_1(self.visited, self.rushhour.free_pos, self.rushhour.length,
+                                        self.rushhour.move_on, self.rushhour.horiz)
+
+        current_score = current_state.score
 
         if current_depth is self.search_depth or current_state.success():
-            current_state.score_heuristic_1(self.visited, self.rushhour.free_pos, self.rushhour.length,
-                                            self.rushhour.move_on, self.rushhour.horiz)
             return current_state
 
         current_state.score = - (sys.maxsize - 1)
         best_state = None
         for possible_state in possible_states:
+            possible_state.previous_state = None
             possible_state.nb_moves -= 1  # because it adds one in get_possible_moves
             tmp_state = self.minimax_1(current_depth + 1, possible_state)
-
+            if tmp_state is None: continue
             if current_state.score < tmp_state.score:
                 current_state.score = tmp_state.score
                 best_state = tmp_state
+
+        current_state.score += current_score
 
         return best_state if current_depth is 0 else current_state
 
@@ -50,7 +54,7 @@ class MiniMaxSearch:
         possible_states = self.rushhour.possible_rock_moves()
 
         if current_depth is self.search_depth:
-            current_state.score_heuristic_1(self.visited, self.rushhour.free_pos, self.rushhour.length,
+            current_state.score_heuristic_2(self.visited, self.rushhour.free_pos, self.rushhour.length,
                                             self.rushhour.move_on, self.rushhour.horiz)
             return current_state
 
@@ -61,21 +65,24 @@ class MiniMaxSearch:
             possible_state.previous_state = None
             possible_state.nb_moves -= 1  # because it adds one in get_possible_moves
             tmp_state = self.max_value(current_depth + 1, possible_state)
+            if tmp_state is None: continue
             if current_state.score > tmp_state.score:
                 current_state.score = tmp_state.score
                 best_state = tmp_state
+
         return best_state if current_depth is 0 else current_state
 
     def max_value(self, current_depth, current_state):
+        # if hash(current_state) in self.visited:
+        #     if self.visited[hash(current_state)] % 2:
+        #         return None
+
         self.rushhour.state = current_state
 
         possible_states = self.rushhour.get_possible_moves()
 
-        if current_state.success():
-            print()
-
         if current_depth is self.search_depth or current_state.success():
-            current_state.score_heuristic_1(self.visited, self.rushhour.free_pos, self.rushhour.length,
+            current_state.score_heuristic_2(self.visited, self.rushhour.free_pos, self.rushhour.length,
                                             self.rushhour.move_on, self.rushhour.horiz)
             return current_state
 
@@ -124,16 +131,16 @@ class MiniMaxSearch:
         best_move = self.minimax_2(0, self.rushhour.state, is_max)
         self.rushhour.state = init_state
         self.rushhour.update_free_pos()
-        if hash(init_state) not in self.visited:
-            self.visited[hash(init_state)] = 1
-        else:
-            self.visited[hash(init_state)] += 1
 
         if is_max:
             self.rushhour.state = init_state.move(best_move.index_of_last_moved_car,
                                                   best_move.last_move_direction)
         else:
             self.rushhour.state = init_state.put_rock(best_move.rock)
+            if hash(init_state) not in self.visited:
+                self.visited[hash(init_state)] = 1
+            else:
+                self.visited[hash(init_state)] += 1
 
     def decide_best_move_pruning(self, is_max):
         pass  # TODO
