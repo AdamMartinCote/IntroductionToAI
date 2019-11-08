@@ -80,6 +80,13 @@ class State:
                     score += (6 - j) + x[i]
         return score
 
+    def __score_len_3_vertical_cars(self, length: List[int], is_horizontal: List[int]) -> int:
+        score = 0
+        for i, (l, i_h) in enumerate(zip(length, is_horizontal)):
+            if i_h or l is 2: continue
+            score += (self.pos[i] + 1) * 2
+        return score
+
     def __get_blocked_cars(self, free_pos: np.ndarray, length: List[int], move_on: List[int],
                            is_horizontal: List[int]) -> int:
 
@@ -99,26 +106,46 @@ class State:
 
         return impediments
 
+    @staticmethod
+    def is_inbound(i, j):
+        return 0 <= i <= 5 and 0 <= j <= 5
+
     def __how_many_cars_touches_rock(self, free_pos: np.ndarray) -> int:
         if not self.rock:
             return 0
 
-        def is_inbound(i, j):
-            return 0 <= i <= 5 and 0 <= j <= 5
-
         x = self.rock[0]
         y = self.rock[1]
-        count = 1 if is_inbound(x + 1, y) and not free_pos[x + 1][y] else 0
-        count += 1 if is_inbound(x - 1, y) and not free_pos[x - 1][y] else 0
-        count += 1 if is_inbound(x, y + 1) and not free_pos[x][y + 1] else 0
-        count += 1 if is_inbound(x, y - 1) and not free_pos[x][y - 1] else 0
+        count = 1 if self.is_inbound(x + 1, y) and not free_pos[x + 1][y] else 0
+        count += 1 if self.is_inbound(x - 1, y) and not free_pos[x - 1][y] else 0
+        count += 1 if self.is_inbound(x, y + 1) and not free_pos[x][y + 1] else 0
+        count += 1 if self.is_inbound(x, y - 1) and not free_pos[x][y - 1] else 0
+        return count
+
+    def __how_many_car_positions_blocked_by_rock(self, length: List[int], move_on: List[int],
+                                                 is_horizontal: List[int]) -> int:
+        if not self.rock:
+            return 0
+
+        count = 0
+        for i, (l, m_o, i_h) in enumerate(zip(length, move_on, is_horizontal)):
+            if i_h:
+                if m_o is self.rock[1]:
+                    count += 1 if self.rock[0] is self.pos[i] - 1 else 0
+                    count += 1 if self.rock[0] is self.pos[i] + l else 0
+            else:
+                if m_o is self.rock[0]:
+                    count += 1 if self.rock[1] is self.pos[i] - 1 else 0
+                    count += 1 if self.rock[1] is self.pos[i] + l else 0
         return count
 
     def score_heuristic_1(self, visited, free_pos: np.ndarray, length: List[int], move_on: List[int],
                           is_horizontal: List[int]):
         nothing = 0
         small_penalty = 100
-        big_penalty = 1000
+        rock_touch_penalty = 100
+        rock_block_penalty = 1000
+
         visited_penalty = 100000
         move_penalty = 100
 
@@ -130,14 +157,16 @@ class State:
         gain = nothing
 
         # penalty += big_penalty * self.__red_car_pos_in_front()
-        # penalty += visited[hash(self)] * visited_penalty if hash(self) in visited else nothing
+        penalty += visited[hash(self)] * visited_penalty if hash(self) in visited else nothing
         penalty += small_penalty * self.__get_impediments(free_pos, length, move_on)
-        penalty += big_penalty * self.__how_many_cars_touches_rock(free_pos)
+        penalty += rock_touch_penalty * self.__how_many_cars_touches_rock(free_pos)
+        penalty += rock_block_penalty * self.__how_many_car_positions_blocked_by_rock(length, move_on, is_horizontal)
         penalty += small_penalty * self.__get_blocked_cars(free_pos, length, move_on, is_horizontal)
         penalty += move_penalty * self.nb_moves
 
         gain += big_gain * self.__red_car_pos_in_back()
         gain += small_gain * self.__get_feeling_score(free_pos)
+        gain += small_gain * self.__score_len_3_vertical_cars(length, is_horizontal)
         gain += win_gain if self.success() else nothing
 
         self.score = gain - penalty

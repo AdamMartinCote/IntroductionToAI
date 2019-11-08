@@ -28,7 +28,7 @@ class TestSolve(TestCase):
     def execute_minimax_1(self):
         rush_hour: RushHour = RushHour(*self.rush_hour_data)
         rush_hour.state = State(self.state_data)
-        algo = MiniMaxSearch(rush_hour, rush_hour.state, 1)
+        algo = MiniMaxSearch(rush_hour, rush_hour.state, 2)
         algo.rushhour.update_free_pos()
         algo.solve_1(verbose=True)
         print(rush_hour.state.nb_moves)
