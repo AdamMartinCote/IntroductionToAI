@@ -178,7 +178,6 @@ class State:
         gain += win_gain if self.success() else nothing
 
         self.score = gain - penalty
-        # print(self.score)
 
     def success(self):
         return self.pos[0] == 4
