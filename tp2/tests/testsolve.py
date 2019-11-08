@@ -28,17 +28,17 @@ class TestSolve(TestCase):
     def execute_minimax_1(self):
         rush_hour: RushHour = RushHour(*self.rush_hour_data)
         rush_hour.state = State(self.state_data)
-        algo = MiniMaxSearch(rush_hour, rush_hour.state, 3)
+        algo = MiniMaxSearch(rush_hour, rush_hour.state, 1)
         algo.rushhour.update_free_pos()
-        algo.solve_1(verbose=True)
+        algo.solve_1(verbose=False)
         print(rush_hour.state.nb_moves)
 
     def execute_minimax_2(self):
         rush_hour: RushHour = RushHour(*self.rush_hour_data)
         rush_hour.state = State(self.state_data)
-        algo = MiniMaxSearch(rush_hour, rush_hour.state, 3)
+        algo = MiniMaxSearch(rush_hour, rush_hour.state, 4)
         algo.rushhour.update_free_pos()
-        algo.solve_2(verbose=True)
+        algo.solve_2(verbose=False)
         print(rush_hour.state.nb_moves)
 
     def test_solve_one_player_1(self):

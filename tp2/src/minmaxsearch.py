@@ -53,9 +53,12 @@ class MiniMaxSearch:
 
         possible_states = self.rushhour.possible_rock_moves()
 
-        if current_depth is self.search_depth:
-            current_state.score_heuristic_2(self.visited, self.rushhour.free_pos, self.rushhour.length,
-                                            self.rushhour.move_on, self.rushhour.horiz)
+        current_state.score_heuristic_1(self.visited, self.rushhour.free_pos, self.rushhour.length,
+                                        self.rushhour.move_on, self.rushhour.horiz)
+
+        current_score = current_state.score
+
+        if current_depth is self.search_depth or current_state.success():
             return current_state
 
         current_state.score = sys.maxsize
@@ -70,6 +73,8 @@ class MiniMaxSearch:
                 current_state.score = tmp_state.score
                 best_state = tmp_state
 
+        current_state.score += current_score
+
         return best_state if current_depth is 0 else current_state
 
     def max_value(self, current_depth, current_state):
@@ -81,9 +86,12 @@ class MiniMaxSearch:
 
         possible_states = self.rushhour.get_possible_moves()
 
+        current_state.score_heuristic_1(self.visited, self.rushhour.free_pos, self.rushhour.length,
+                                        self.rushhour.move_on, self.rushhour.horiz)
+
+        current_score = current_state.score
+
         if current_depth is self.search_depth or current_state.success():
-            current_state.score_heuristic_2(self.visited, self.rushhour.free_pos, self.rushhour.length,
-                                            self.rushhour.move_on, self.rushhour.horiz)
             return current_state
 
         current_state.score = - (sys.maxsize - 1)
@@ -95,6 +103,9 @@ class MiniMaxSearch:
             if current_state.score < tmp_state.score:
                 current_state.score = tmp_state.score
                 best_state = tmp_state
+
+        current_state.score += current_score
+
         return best_state if current_depth is 0 else current_state
 
     def minimax_2(self, current_depth, current_state, is_max):
@@ -151,20 +162,20 @@ class MiniMaxSearch:
     def solve_1(self, verbose=True):
         while not self.rushhour.state.success():
             self.decide_best_move_1()
-            s = self.str_move(True, self.rushhour.state)
-            if verbose:
-                print(s)
+            # s = self.str_move(True, self.rushhour.state)
+            # if verbose:
+            #     print(s)
 
     def solve_2(self, verbose=True):
         is_max = True
         while not self.rushhour.state.success():
             self.decide_best_move_2(is_max)
-            s = self.str_move(is_max, self.rushhour.state)
+            # s = self.str_move(is_max, self.rushhour.state)
 
             is_max = not is_max
 
-            if verbose:
-                print(s)
+            # if verbose:
+            #     print(s)
 
     def str_move(self, is_car, state):
         self.rushhour.plot_free_pos()

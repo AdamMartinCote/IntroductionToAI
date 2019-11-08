@@ -39,6 +39,14 @@ class State:
         return s
 
     def put_rock(self, rock_pos) -> 'State':
+        s = State(self.pos)
+        s.previous_state = self
+        s.index_of_last_moved_car = self.index_of_last_moved_car
+        s.last_move_direction = self.last_move_direction
+        s.nb_moves = self.nb_moves
+        s.rock = rock_pos
+        return s
+
         new_state = deepcopy(self)
         new_state.previous_state = self
         new_state.rock = rock_pos
