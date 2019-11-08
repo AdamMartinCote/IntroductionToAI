@@ -150,7 +150,7 @@ class State:
     def score_heuristic_1(self, visited, free_pos: np.ndarray, length: List[int], move_on: List[int],
                           is_horizontal: List[int]):
         nothing = 0
-        small_penalty = 1000
+        impediment_penalty = 1000
         rock_touch_penalty = 100
         rock_block_penalty = 1000
 
@@ -166,10 +166,10 @@ class State:
 
         # penalty += big_penalty * self.__red_car_pos_in_front()
         penalty += visited[hash(self)] * visited_penalty if hash(self) in visited else nothing
-        penalty += small_penalty * self.__get_impediments(free_pos, length, move_on)
+        penalty += impediment_penalty * self.__get_impediments(free_pos, length, move_on)
+        penalty += impediment_penalty * self.__get_blocked_cars(free_pos, length, move_on, is_horizontal)
         penalty += rock_touch_penalty * self.__how_many_cars_touches_rock(free_pos)
         penalty += rock_block_penalty * self.__how_many_car_positions_blocked_by_rock(length, move_on, is_horizontal)
-        penalty += small_penalty * self.__get_blocked_cars(free_pos, length, move_on, is_horizontal)
         penalty += move_penalty * self.nb_moves
 
         gain += big_gain * self.__red_car_pos_in_back()
