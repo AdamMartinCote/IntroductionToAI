@@ -150,7 +150,7 @@ class State:
     def score_heuristic_1(self, visited, free_pos: np.ndarray, length: List[int], move_on: List[int],
                           is_horizontal: List[int]):
         nothing = 0
-        impediment_penalty = 1000
+        impediment_penalty = 10000
         rock_touch_penalty = 100
         rock_block_penalty = 1000
 
