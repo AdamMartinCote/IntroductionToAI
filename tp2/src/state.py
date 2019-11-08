@@ -60,11 +60,6 @@ class State:
         """
         self.score = self.score_heuristic_1(free_pos)
 
-    def __red_car_pos_in_front(self) -> int:
-        red_car_position = self.pos[0]
-        goal_position = 6
-        return goal_position - red_car_position
-
     def __red_car_pos_in_back(self) -> int:
         red_car_position = self.pos[0]
         return red_car_position
@@ -150,21 +145,20 @@ class State:
     def score_heuristic_1(self, visited, free_pos: np.ndarray, length: List[int], move_on: List[int],
                           is_horizontal: List[int]):
         nothing = 0
-        impediment_penalty = 10000
-        rock_touch_penalty = 100
-        rock_block_penalty = 1000
+        impediment_penalty = 3
+        rock_touch_penalty = 1
+        rock_block_penalty = 2
 
-        visited_penalty = 100000
-        move_penalty = 10000
+        visited_penalty = 100
+        move_penalty = 25
 
         small_gain = 1
-        big_gain = 1000
-        win_gain = 10000000000000
+        red_car_gain = 50
+        win_gain = 5000
 
         penalty = nothing
         gain = nothing
 
-        # penalty += big_penalty * self.__red_car_pos_in_front()
         penalty += visited[hash(self)] * visited_penalty if hash(self) in visited else nothing
         penalty += impediment_penalty * self.__get_impediments(free_pos, length, move_on)
         penalty += impediment_penalty * self.__get_blocked_cars(free_pos, length, move_on, is_horizontal)
@@ -172,7 +166,7 @@ class State:
         penalty += rock_block_penalty * self.__how_many_car_positions_blocked_by_rock(length, move_on, is_horizontal)
         penalty += move_penalty * self.nb_moves
 
-        gain += big_gain * self.__red_car_pos_in_back()
+        gain += red_car_gain * self.__red_car_pos_in_back()
         gain += small_gain * self.__get_feeling_score(free_pos)
         gain += small_gain * self.__score_len_3_vertical_cars(length, is_horizontal)
         gain += win_gain if self.success() else nothing
