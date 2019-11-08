@@ -142,17 +142,31 @@ class State:
                     count += 1 if self.rock[1] is self.pos[i] + l else 0
         return count
 
+    def __negative_feeling(self, free_pos: np.ndarray) -> int:
+        feeling = 0
+
+        for i in range(6):
+            for j in range(self.pos[RED_CAR_INDEX] + 2, 6):
+                feeling += not free_pos[i][j]
+
+        return feeling
+
     def score_heuristic_1(self, visited, free_pos: np.ndarray, length: List[int], move_on: List[int],
                           is_horizontal: List[int]):
         nothing = 0
-        impediment_penalty = 3
+
+        impediment_penalty = 5
+        block_penalty = 5
+
+        negative_feeling_penalty = 1
         rock_touch_penalty = 1
-        rock_block_penalty = 2
+        rock_block_penalty = 4
 
         visited_penalty = 100
         move_penalty = 25
 
-        small_gain = 1
+        feeling_gain = 1
+        vertical_3_gain = 2
         red_car_gain = 50
         win_gain = 5000
 
@@ -161,14 +175,15 @@ class State:
 
         penalty += visited[hash(self)] * visited_penalty if hash(self) in visited else nothing
         penalty += impediment_penalty * self.__get_impediments(free_pos, length, move_on)
-        penalty += impediment_penalty * self.__get_blocked_cars(free_pos, length, move_on, is_horizontal)
+        penalty += block_penalty * self.__get_blocked_cars(free_pos, length, move_on, is_horizontal)
         penalty += rock_touch_penalty * self.__how_many_cars_touches_rock(free_pos)
         penalty += rock_block_penalty * self.__how_many_car_positions_blocked_by_rock(length, move_on, is_horizontal)
+        penalty += negative_feeling_penalty * self.__negative_feeling(free_pos)
         penalty += move_penalty * self.nb_moves
 
         gain += red_car_gain * self.__red_car_pos_in_back()
-        gain += small_gain * self.__get_feeling_score(free_pos)
-        gain += small_gain * self.__score_len_3_vertical_cars(length, is_horizontal)
+        gain += feeling_gain * self.__get_feeling_score(free_pos)
+        gain += vertical_3_gain * self.__score_len_3_vertical_cars(length, is_horizontal)
         gain += win_gain if self.success() else nothing
 
         self.score = gain - penalty

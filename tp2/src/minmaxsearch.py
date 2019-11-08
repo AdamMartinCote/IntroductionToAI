@@ -162,23 +162,24 @@ class MiniMaxSearch:
     def solve_1(self, verbose=True):
         while not self.rushhour.state.success():
             self.decide_best_move_1()
-            # s = self.str_move(True, self.rushhour.state)
-            # if verbose:
-            #     print(s)
+            s = self.str_move(True, self.rushhour.state)
+            if verbose:
+                self.rushhour.plot_free_pos()
+                print(s)
 
     def solve_2(self, verbose=True):
         is_max = True
         while not self.rushhour.state.success():
             self.decide_best_move_2(is_max)
-            # s = self.str_move(is_max, self.rushhour.state)
+            s = self.str_move(is_max, self.rushhour.state)
 
             is_max = not is_max
 
-            # if verbose:
-            #     print(s)
+            if verbose:
+                self.rushhour.plot_free_pos()
+                print(s)
 
     def str_move(self, is_car, state):
-        self.rushhour.plot_free_pos()
         message = ''
         if is_car:
             car_index = state.index_of_last_moved_car
