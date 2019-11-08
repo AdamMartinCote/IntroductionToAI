@@ -1,6 +1,5 @@
 import sys
 
-from tp2.src.rushhour import RushHour
 from tp2.src.state import State
 
 MAX_RECURSION = 500
@@ -22,9 +21,8 @@ class MiniMaxSearch:
         seul joueur et retourne le meilleur coup à prendre à partir de l'état
         courant
         """
-        # todo: je suis vraiment pas certain de ca
-        if hash(current_state) in self.visited:
-            return None
+        # if hash(current_state) in self.visited:
+        #     return None
 
         self.rushhour
 
@@ -32,8 +30,8 @@ class MiniMaxSearch:
 
         possible_states = self.rushhour.get_possible_moves()
 
-        if current_depth is self.search_depth:
-            current_state.score_heuristic_1(self.rushhour.free_pos, self.rushhour.length,
+        if current_depth is self.search_depth or current_state.success():
+            current_state.score_heuristic_1(self.visited, self.rushhour.free_pos, self.rushhour.length,
                                             self.rushhour.move_on, self.rushhour.horiz)
             return current_state
 
@@ -83,7 +81,7 @@ class MiniMaxSearch:
         self.visited.add(hash(init_state))
         # print(self.str_move(True, best_move))
         self.rushhour.state = init_state.move(best_move.index_of_last_moved_car,
-                                                       best_move.last_move_direction)
+                                              best_move.last_move_direction)
 
     def decide_best_move_2(self, is_max):
         pass  # TODO

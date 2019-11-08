@@ -30,7 +30,7 @@ class TestSolve(TestCase):
         rush_hour.state = State(self.state_data)
         algo = MiniMaxSearch(rush_hour, rush_hour.state, 1)
         algo.rushhour.update_free_pos()
-        algo.solve_1(verbose=False)
+        algo.solve_1(verbose=True)
         print(rush_hour.state.nb_moves)
 
     def test_solve_one_player_1(self):

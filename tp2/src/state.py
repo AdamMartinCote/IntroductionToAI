@@ -61,10 +61,6 @@ class State:
         red_car_position = self.pos[0]
         return red_car_position
 
-    def __is_red_car_on_winning_pos(self) -> bool:
-        winning_pos = 4
-        return self.pos[RED_CAR_INDEX] is winning_pos
-
     def __get_impediments(self, free_pos: np.ndarray, length: List[int], move_on: List[int]) -> int:
         red_car = 0
         space_after_red_car = self.pos[0] + length[0]
@@ -79,8 +75,8 @@ class State:
         score = 0
         for i in range(6):
             for j in range(6):
-                if free_pos[i][j]:
-                    score += j - abs(i - 2) + 1
+                if not free_pos[i][j]:
+                    score += (6 - j) + abs(i - 2) + 1
         return score
 
     def __get_blocked_cars(self, free_pos: np.ndarray, length: List[int], move_on: List[int],
@@ -117,30 +113,34 @@ class State:
         count += 1 if is_inbound(x, y - 1) and not free_pos[x][y - 1] else 0
         return count
 
-    def score_heuristic_1(self, free_pos: np.ndarray, length: List[int], move_on: List[int],
+    def score_heuristic_1(self, visited, free_pos: np.ndarray, length: List[int], move_on: List[int],
                           is_horizontal: List[int]):
         nothing = 0
         small_penalty = 10
         big_penalty = 1000
+        visited_penalty = 20000
 
-        small_gain = 10
-        big_gain = 200
+        small_gain = 100
+        big_gain = 1000
         win_gain = 100000
 
         penalty = nothing
         gain = nothing
 
         # penalty += big_penalty * self.__red_car_pos_in_front()
+        penalty += visited_penalty if hash(self) in visited else nothing
+        penalty += big_penalty * self.__get_impediments(free_pos, length, move_on)
         penalty += small_penalty * self.__how_many_cars_touches_rock(free_pos)
-        penalty += small_penalty * self.__get_impediments(free_pos, length, move_on)
         penalty += small_penalty * self.__get_blocked_cars(free_pos, length, move_on, is_horizontal)
-        # penalty += small_penalty * self.nb_moves
+        penalty += small_penalty * self.nb_moves
         #
         gain += big_gain * self.__red_car_pos_in_back()
         gain += small_gain * self.__get_feeling_score(free_pos)
-        # gain += win_gain if self.__is_red_car_on_winning_pos() else nothing
+        gain += win_gain if self.success() else nothing
 
         self.score = gain - penalty
+        # print(self.score)
+
 
     def score_heuristic_2(self) -> float:
         """
