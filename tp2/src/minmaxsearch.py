@@ -49,15 +49,69 @@ class MiniMaxSearch:
         return best_state if current_depth is 0 else current_state
 
     def min_value(self, current_depth, current_state):
-        pass
+        # if hash(current_state) in self.visited:
+        #     return None
+
+        self.rushhour.state = current_state
+
+        possible_states = self.rushhour.possible_rock_moves()
+
+        if current_state.success():
+            print()
+
+        if current_depth is self.search_depth or current_state.success():
+            current_state.score_heuristic_1(self.visited, self.rushhour.free_pos, self.rushhour.length,
+                                            self.rushhour.move_on, self.rushhour.horiz)
+            return current_state
+
+        current_state.score = sys.maxsize
+        best_state = None
+
+        for possible_state in possible_states:
+            possible_state.previous_state = None
+            possible_state.nb_moves -= 1  # because it adds one in get_possible_moves
+            tmp_state = self.max_value(current_depth + 1, possible_state)
+            if tmp_state is None: continue
+            if current_state.score > tmp_state.score:
+                current_state.score = tmp_state.score
+                best_state = tmp_state
+        return best_state if current_depth is 0 else current_state
 
     def max_value(self, current_depth, current_state):
-        pass
+        """
+                Cette fonction contient la logique de l'algorithme minimax pour un
+                seul joueur et retourne le meilleur coup à prendre à partir de l'état
+                courant
+                """
+        # if hash(current_state) in self.visited:
+        #     return None
+
+        self.rushhour.state = current_state
+
+        possible_states = self.rushhour.get_possible_moves()
+
+        if current_state.success():
+            print()
+
+        if current_depth is self.search_depth or current_state.success():
+            current_state.score_heuristic_1(self.visited, self.rushhour.free_pos, self.rushhour.length,
+                                            self.rushhour.move_on, self.rushhour.horiz)
+            return current_state
+
+        current_state.score = - (sys.maxsize - 1)
+        best_state = None
+        for possible_state in possible_states:
+            possible_state.previous_state = None
+            possible_state.nb_moves -= 1  # because it adds one in get_possible_moves
+            tmp_state = self.min_value(current_depth + 1, possible_state)
+            if tmp_state is None: continue
+            if current_state.score < tmp_state.score:
+                current_state.score = tmp_state.score
+                best_state = tmp_state
+        return best_state if current_depth is 0 else current_state
 
     def minimax_2(self, current_depth, current_state, is_max):
-        # TODO
-        best_move = None
-        return best_move
+        return self.max_value(current_depth, current_state) if is_max else self.min_value(current_depth, current_state)
 
     def minimax_pruning(self, current_depth, current_state, is_max, alpha, beta):
         # TODO
@@ -87,7 +141,23 @@ class MiniMaxSearch:
                                               best_move.last_move_direction)
 
     def decide_best_move_2(self, is_max):
-        pass  # TODO
+        # todo: this is a try
+        if not is_max:
+            print()
+        init_state = self.rushhour.state
+        best_move = self.minimax_2(0, self.rushhour.state, is_max)
+        self.rushhour.state = init_state
+        self.rushhour.update_free_pos()
+        if hash(init_state) not in self.visited:
+            self.visited[hash(init_state)] = 1
+        else:
+            self.visited[hash(init_state)] += 1
+
+        if is_max:
+            self.rushhour.state = init_state.move(best_move.index_of_last_moved_car,
+                                                  best_move.last_move_direction)
+        else:
+            self.rushhour.state = init_state.put_rock(best_move.rock)
 
     def decide_best_move_pruning(self, is_max):
         pass  # TODO
@@ -102,8 +172,16 @@ class MiniMaxSearch:
             if verbose:
                 print(s)
 
-    def solve_2(self, state):
-        pass
+    def solve_2(self, verbose=True):
+        is_max = True
+        while not self.rushhour.state.success():
+            self.decide_best_move_2(is_max)
+            s = self.str_move(is_max, self.rushhour.state)
+
+            is_max = not is_max
+
+            if verbose:
+                print(s)
 
     def str_move(self, is_car, state):
         self.rushhour.plot_free_pos()

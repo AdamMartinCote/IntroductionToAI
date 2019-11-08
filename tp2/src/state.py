@@ -119,12 +119,12 @@ class State:
         nothing = 0
         small_penalty = 100
         big_penalty = 1000
-        visited_penalty = 10000
+        visited_penalty = 100000
         move_penalty = 100
 
         small_gain = 1
         big_gain = 1000
-        win_gain = 10000000
+        win_gain = 10000000000
 
         penalty = nothing
         gain = nothing
@@ -132,7 +132,7 @@ class State:
         # penalty += big_penalty * self.__red_car_pos_in_front()
         # penalty += visited[hash(self)] * visited_penalty if hash(self) in visited else nothing
         penalty += small_penalty * self.__get_impediments(free_pos, length, move_on)
-        penalty += small_penalty * self.__how_many_cars_touches_rock(free_pos)
+        penalty += big_penalty * self.__how_many_cars_touches_rock(free_pos)
         penalty += small_penalty * self.__get_blocked_cars(free_pos, length, move_on, is_horizontal)
         penalty += move_penalty * self.nb_moves
 
