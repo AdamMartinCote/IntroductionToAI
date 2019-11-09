@@ -59,7 +59,7 @@ class TestSolve(TestCase):
 
     def test_solve_one_player_3(self):
         """
-        best outcome = 16 moves
+        best outcome = 14 moves
         """
         self.rush_hour_data = rush_hour_data_3
         self.state_data = state_data_3
@@ -83,7 +83,7 @@ class TestSolve(TestCase):
 
     def test_solve_two_player_3(self):
         """
-        best outcome = 16 moves
+        best outcome = 14 moves
         """
         self.rush_hour_data = rush_hour_data_3
         self.state_data = state_data_3
