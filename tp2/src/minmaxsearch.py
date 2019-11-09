@@ -216,7 +216,7 @@ class MiniMaxSearch:
             else:
                 self.visited[hash(init_state)] += 1
 
-    def solve_single_player(self, verbose=True):
+    def solve_single_player(self, verbose=True) -> None:
         while not self.rushhour.state.success():
             self.decide_best_move_1()
             s = self.str_move(True, self.rushhour.state)
