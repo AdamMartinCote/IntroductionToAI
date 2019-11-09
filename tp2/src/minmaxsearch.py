@@ -38,12 +38,11 @@ class MiniMaxSearch:
             possible_state.previous_state = None
             possible_state.nb_moves -= 1  # because it adds one in get_possible_moves
             tmp_state = self.minimax_1(current_depth + 1, possible_state)
+            tmp_state.score += current_score
             if tmp_state is None: continue
             if current_state.score < tmp_state.score:
                 current_state.score = tmp_state.score
                 best_state = tmp_state
-
-        current_state.score += current_score
 
         return best_state if current_depth is 0 else current_state
 
@@ -68,12 +67,10 @@ class MiniMaxSearch:
             possible_state.previous_state = None
             possible_state.nb_moves -= 1  # because it adds one in get_possible_moves
             tmp_state = self.max_value(current_depth + 1, possible_state)
-            if tmp_state is None: continue
+            tmp_state.score += current_score
             if current_state.score > tmp_state.score:
                 current_state.score = tmp_state.score
                 best_state = tmp_state
-
-        current_state.score += current_score
 
         return best_state if current_depth is 0 else current_state
 
@@ -100,11 +97,10 @@ class MiniMaxSearch:
             possible_state.previous_state = None
             possible_state.nb_moves -= 1  # because it adds one in get_possible_moves
             tmp_state = self.min_value(current_depth + 1, possible_state)
+            tmp_state.score += current_score
             if current_state.score < tmp_state.score:
                 current_state.score = tmp_state.score
                 best_state = tmp_state
-
-        current_state.score += current_score
 
         return best_state if current_depth is 0 else current_state
 
