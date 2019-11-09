@@ -168,11 +168,6 @@ class MiniMaxSearch:
         return self.max_pruning(current_depth, current_state, alpha, beta) if is_max \
             else self.min_pruning(current_depth, current_state, alpha, beta)
 
-    def expectimax(self, current_depth, current_state, is_max):
-        # TODO
-        best_move = None
-        return best_move
-
     def decide_best_move_1(self):
         """
         Cette fonction trouve et exécute le meilleur coup pour une partie à un joueur
@@ -221,10 +216,7 @@ class MiniMaxSearch:
             else:
                 self.visited[hash(init_state)] += 1
 
-    def decide_best_move_expectimax(self, is_max):
-        pass  # TODO
-
-    def solve_1(self, verbose=True):
+    def solve_single_player(self, verbose=True):
         while not self.rushhour.state.success():
             self.decide_best_move_1()
             s = self.str_move(True, self.rushhour.state)
@@ -232,7 +224,7 @@ class MiniMaxSearch:
                 self.rushhour.plot_free_pos()
                 print(s)
 
-    def solve_2(self, verbose=True):
+    def solve_two_players(self, verbose=True):
         is_max = True
         while not self.rushhour.state.success():
             self.decide_best_move_2(is_max)
