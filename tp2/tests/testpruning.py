@@ -32,18 +32,24 @@ class TestPruning(unittest.TestCase):
         algo = MiniMaxSearch(rush_hour, rush_hour.state, 1)
         algo.rushhour.update_free_pos()
 
-        algo.solve_1(verbose=False)
+        algo.solve_pruning(verbose=True)
         print(rush_hour.state.nb_moves)
 
 
     def test_pruning_1(self):
-        self.assertEqual(True, False)
+        self.rush_hour_data = rush_hour_data_1
+        self.state_data = state_data_1
+        self.execute_pruning()
 
     def test_pruning_2(self):
-        self.assertEqual(True, False)
+        self.rush_hour_data = rush_hour_data_2
+        self.state_data = state_data_2
+        self.execute_pruning()
 
     def test_pruning_3(self):
-        self.assertEqual(True, False)
+        self.rush_hour_data = rush_hour_data_3
+        self.state_data = state_data_3
+        self.execute_pruning()
 
 if __name__ == '__main__':
     unittest.main()

@@ -112,10 +112,63 @@ class MiniMaxSearch:
         return self.max_value(current_depth, current_state) if is_max else self.min_value(current_depth, current_state)
 
     def min_pruning(self, current_depth, current_state, alpha, beta):
-        pass
+        self.rushhour.state = current_state
+
+        possible_states = self.rushhour.possible_rock_moves()
+
+        current_state.score_heuristic_1(self.visited, self.rushhour.free_pos, self.rushhour.length,
+                                        self.rushhour.move_on, self.rushhour.horiz)
+
+        current_score = current_state.score
+
+        if current_depth is self.search_depth or current_state.success():
+            return current_state
+
+        current_state.score = sys.maxsize
+        best_state = None
+
+        for possible_state in possible_states:
+            possible_state.previous_state = None
+            possible_state.nb_moves -= 1  # because it adds one in get_possible_moves
+            tmp_state = self.max_pruning(current_depth + 1, possible_state, alpha, beta)
+            if current_state.score > tmp_state.score:
+                current_state.score = tmp_state.score
+                best_state = tmp_state
+            beta = min(beta, current_state.score)
+            if alpha >= beta: break
+
+        current_state.score += current_score
+
+        return best_state if current_depth is 0 else current_state
 
     def max_pruning(self, current_depth, current_state, alpha, beta):
-        pass
+        self.rushhour.state = current_state
+
+        possible_states = self.rushhour.get_possible_moves()
+
+        current_state.score_heuristic_1(self.visited, self.rushhour.free_pos, self.rushhour.length,
+                                        self.rushhour.move_on, self.rushhour.horiz)
+
+        current_score = current_state.score
+
+        if current_depth is self.search_depth or current_state.success():
+            return current_state
+
+        current_state.score = - (sys.maxsize - 1)
+        best_state = None
+        for possible_state in possible_states:
+            possible_state.previous_state = None
+            possible_state.nb_moves -= 1  # because it adds one in get_possible_moves
+            tmp_state = self.min_pruning(current_depth + 1, possible_state, alpha, beta)
+            if current_state.score < tmp_state.score:
+                current_state.score = tmp_state.score
+                best_state = tmp_state
+            alpha = max(alpha, current_state.score)
+            if alpha >= beta: break
+
+        current_state.score += current_score
+
+        return best_state if current_depth is 0 else current_state
 
     def minimax_pruning(self, current_depth, current_state, is_max, alpha, beta):
         return self.max_pruning(current_depth, current_state, alpha, beta) if is_max \
@@ -160,7 +213,7 @@ class MiniMaxSearch:
 
     def decide_best_move_pruning(self, is_max):
         init_state = self.rushhour.state
-        best_move = self.minimax_pruning(0, self.rushhour.state, is_max)
+        best_move = self.minimax_pruning(0, self.rushhour.state, is_max, - (sys.maxsize - 1), sys.maxsize)
         self.rushhour.state = init_state
         self.rushhour.update_free_pos()
 
