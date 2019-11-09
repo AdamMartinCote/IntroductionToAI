@@ -74,3 +74,4 @@ class TestSolve(TestCase):
         algo = ExpectimaxSearch(rush_hour, rush_hour.state, 3)
         nb_moves = self.execute_algo(algo)
         print(nb_moves)
+        self.assertEqual(9, nb_moves)
