@@ -127,13 +127,12 @@ class MiniMaxSearch:
             possible_state.previous_state = None
             possible_state.nb_moves -= 1  # because it adds one in get_possible_moves
             tmp_state = self.max_pruning(current_depth + 1, possible_state, alpha, beta)
+            tmp_state.score += current_score
             if current_state.score > tmp_state.score:
                 current_state.score = tmp_state.score
                 best_state = tmp_state
             beta = min(beta, current_state.score)
             if alpha >= beta: break
-
-        current_state.score += current_score
 
         return best_state if current_depth is 0 else current_state
 
@@ -156,13 +155,12 @@ class MiniMaxSearch:
             possible_state.previous_state = None
             possible_state.nb_moves -= 1  # because it adds one in get_possible_moves
             tmp_state = self.min_pruning(current_depth + 1, possible_state, alpha, beta)
+            tmp_state.score += current_score
             if current_state.score < tmp_state.score:
                 current_state.score = tmp_state.score
                 best_state = tmp_state
             alpha = max(alpha, current_state.score)
             if alpha >= beta: break
-
-        current_state.score += current_score
 
         return best_state if current_depth is 0 else current_state
 
