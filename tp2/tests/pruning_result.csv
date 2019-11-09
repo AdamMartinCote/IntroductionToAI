@@ -1,4 +1,4 @@
 test_name,time (ms)
-test_pruning_1,650.40
-testpruning.TestPruning.test_pruning_2,814.54
-testpruning.TestPruning.test_pruning_3,622.81
+test_pruning_1,644.76
+test_pruning_2,811.65
+test_pruning_3,616.12
