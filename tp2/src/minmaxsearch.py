@@ -111,10 +111,15 @@ class MiniMaxSearch:
     def minimax_2(self, current_depth, current_state, is_max):
         return self.max_value(current_depth, current_state) if is_max else self.min_value(current_depth, current_state)
 
+    def min_pruning(self, current_depth, current_state, alpha, beta):
+        pass
+
+    def max_pruning(self, current_depth, current_state, alpha, beta):
+        pass
+
     def minimax_pruning(self, current_depth, current_state, is_max, alpha, beta):
-        # TODO
-        best_move = None
-        return best_move
+        return self.max_pruning(current_depth, current_state, alpha, beta) if is_max \
+            else self.min_pruning(current_depth, current_state, alpha, beta)
 
     def expectimax(self, current_depth, current_state, is_max):
         # TODO
@@ -154,7 +159,20 @@ class MiniMaxSearch:
                 self.visited[hash(init_state)] += 1
 
     def decide_best_move_pruning(self, is_max):
-        pass  # TODO
+        init_state = self.rushhour.state
+        best_move = self.minimax_pruning(0, self.rushhour.state, is_max)
+        self.rushhour.state = init_state
+        self.rushhour.update_free_pos()
+
+        if is_max:
+            self.rushhour.state = init_state.move(best_move.index_of_last_moved_car,
+                                                  best_move.last_move_direction)
+        else:
+            self.rushhour.state = init_state.put_rock(best_move.rock)
+            if hash(init_state) not in self.visited:
+                self.visited[hash(init_state)] = 1
+            else:
+                self.visited[hash(init_state)] += 1
 
     def decide_best_move_expectimax(self, is_max):
         pass  # TODO
@@ -171,6 +189,18 @@ class MiniMaxSearch:
         is_max = True
         while not self.rushhour.state.success():
             self.decide_best_move_2(is_max)
+            s = self.str_move(is_max, self.rushhour.state)
+
+            is_max = not is_max
+
+            if verbose:
+                self.rushhour.plot_free_pos()
+                print(s)
+
+    def solve_pruning(self, verbose=True):
+        is_max = True
+        while not self.rushhour.state.success():
+            self.decide_best_move_pruning(is_max)
             s = self.str_move(is_max, self.rushhour.state)
 
             is_max = not is_max
