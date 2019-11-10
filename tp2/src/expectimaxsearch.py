@@ -15,7 +15,7 @@ class Agent(Enum):
 def get_next_agent_generator():
     while True:
         yield Agent.MAX
-        yield Agent.EXP
+        # yield Agent.EXP
 
 
 class ExpectimaxSearch(MiniMaxSearch):
@@ -28,15 +28,17 @@ class ExpectimaxSearch(MiniMaxSearch):
         return the nb of steps
         print the state if verbose
         """
-        _, final_state = self.get_value(self.rushhour.state)
-        self.rushhour.state = final_state
-        self.rushhour.plot_free_pos()
+        _, final_state = self.get_value(self.rushhour.state, depth=3)
+
         if verbose:
             pass
         return final_state.nb_moves
 
     def get_value(self, state, depth=1) -> (int, State):
         if state.success() or depth == 0:
+            self.rushhour.state = state
+            self.rushhour.update_free_pos()
+            self.rushhour.plot_free_pos()
             return self.get_state_utility(state), state
 
         agent = next(self.agent)
@@ -63,8 +65,9 @@ class ExpectimaxSearch(MiniMaxSearch):
         v = 0
         for successor in child_states:
             p = ExpectimaxSearch.probability(successor)
-            v += p * self.get_value(successor, depth - 1)
-        return v,
+            v += p * self.get_value(successor, depth - 1)[0]
+        # TODO : UNMOCK
+        return v, child_states[0]
 
     def get_state_utility(self, state):
         return state.score_heuristic_1(self.visited,
