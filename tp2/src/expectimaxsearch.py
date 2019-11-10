@@ -5,6 +5,7 @@ from typing import List
 from tp2.src.minmaxsearch import MiniMaxSearch
 from tp2.src.state import State
 
+default_depth = 1
 DONT_CARE = 0
 
 
@@ -39,11 +40,13 @@ class ExpectimaxSearch(MiniMaxSearch):
             self.rushhour.print_grid()
         return state.nb_moves
 
-    def get_value(self, state, depth=1) -> (int, State):
+    def get_value(self, state, depth=default_depth) -> (int, State):
         if state.success() or depth == 0:
-            self.rushhour.state = state
-            self.rushhour.update_free_pos()
-            self.rushhour.plot_free_pos()
+            print(state)
+            # self.rushhour.state = state
+            # self.rushhour.update_free_pos()
+            # self.rushhour.plot_free_pos()
+            self.state_history.append(state)
             return self.get_state_utility(state), state
 
         agent = next(self.agent)
