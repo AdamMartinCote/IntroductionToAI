@@ -34,9 +34,7 @@ class TestSolve(TestCase):
         algo.solve_single_player(verbose=False)
         print(rush_hour.state.nb_moves)
 
-    def execute_algo(self, algo) -> int:
-        # rush_hour: RushHour = RushHour(*self.rush_hour_data)
-        # rush_hour.state = State(self.state_data)
+    def execute_algo_single_player(self, algo) -> int:
         algo.rushhour.update_free_pos()
         algo.solve_single_player(verbose=False)
         return algo.rushhour.state.nb_moves
@@ -72,6 +70,6 @@ class TestSolve(TestCase):
         rush_hour = RushHour(*rush_hour_data_1)
         rush_hour.state = State(state_data_1)
         algo = ExpectimaxSearch(rush_hour, rush_hour.state, 3)
-        nb_moves = self.execute_algo(algo)
+        nb_moves = self.execute_algo_single_player(algo)
         print(nb_moves)
         self.assertEqual(9, nb_moves)

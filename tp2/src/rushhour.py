@@ -33,22 +33,24 @@ class RushHour:
         if self.state.rock:
             self.free_pos[self.state.rock[0]][self.state.rock[1]] = OCCUPIED
 
-    def get_possible_moves(self) -> List[State]:
+    def get_possible_moves(self, state=None) -> List[State]:
+        if state is None:
+            state = self.state
         self.update_free_pos()
         new_states = []
         for i in range(self.nbcars):
             if self.horiz[i]:
-                if self.state.pos[i] + self.length[i] - 1 < 5 and self.free_pos[self.move_on[i],
-                                                                                self.state.pos[i] + self.length[i]]:
-                    new_states.append(self.state.move(i, +1))
-                if self.state.pos[i] > 0 and self.free_pos[self.move_on[i], self.state.pos[i] - 1]:
-                    new_states.append(self.state.move(i, -1))
+                if state.pos[i] + self.length[i] - 1 < 5 and self.free_pos[self.move_on[i],
+                                                                           state.pos[i] + self.length[i]]:
+                    new_states.append(state.move(i, +1))
+                if state.pos[i] > 0 and self.free_pos[self.move_on[i], state.pos[i] - 1]:
+                    new_states.append(state.move(i, -1))
             else:
-                if self.state.pos[i] + self.length[i] - 1 < 5 and self.free_pos[self.state.pos[i] + self.length[i],
-                                                                                self.move_on[i]]:
-                    new_states.append(self.state.move(i, +1))
-                if self.state.pos[i] > 0 and self.free_pos[self.state.pos[i] - 1, self.move_on[i]]:
-                    new_states.append(self.state.move(i, -1))
+                if state.pos[i] + self.length[i] - 1 < 5 and self.free_pos[state.pos[i] + self.length[i],
+                                                                           self.move_on[i]]:
+                    new_states.append(state.move(i, +1))
+                if state.pos[i] > 0 and self.free_pos[state.pos[i] - 1, self.move_on[i]]:
+                    new_states.append(state.move(i, -1))
         return new_states
 
     def possible_rock_moves(self) -> List[State]:
