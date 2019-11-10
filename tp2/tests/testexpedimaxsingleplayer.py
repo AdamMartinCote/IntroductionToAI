@@ -5,6 +5,7 @@ from tp2.src.state import State
 from .data import *
 from .testbase import TestBase
 from .testrushhour import TestRushHour
+from ..src.heuristics import Heuristics
 
 
 class TestExpedimaxSinglePlayer(TestBase):
@@ -31,9 +32,22 @@ class TestExpedimaxSinglePlayer(TestBase):
         except Exception:
             pass
 
-        state_history = ExpectimaxSearch.state_history
+        state_history = algo.state_history
         for i, in range(len(state_history) - 1):
             pair = (state_history[i],
                     state_history[i + 1])
             self.assertTrue(TestRushHour.states_are_consecutives(pair[0],
                                                                  pair[1]))
+
+    def test_blocking_heuristics(self):
+        heuristics = Heuristics(RushHour(*rush_hour_data_1))
+        nb = heuristics.blocking(State(state_data_1))
+        self.assertEqual(2, nb)
+
+        # heuristics = Heuristics(RushHour(*rush_hour_data_2))
+        # nb = heuristics.blocking(State(state_data_2))
+        # self.assertEqual(2, nb)
+
+        heuristics = Heuristics(RushHour(*rush_hour_data_3))
+        nb = heuristics.blocking(State(state_data_3))
+        self.assertEqual(3, nb)

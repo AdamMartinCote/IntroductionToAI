@@ -6,7 +6,6 @@ from tp2.src.minmaxsearch import MiniMaxSearch
 from tp2.src.state import State
 
 default_depth = 1
-DONT_CARE = 0
 
 
 class Agent(Enum):
@@ -26,7 +25,7 @@ class ExpectimaxSearch(MiniMaxSearch):
         self.state_history: List[State] = []
         super().__init__(*arg, **kwargs)
 
-    def solve_single_player(self, verbose=True) -> State:
+    def solve_single_player(self, verbose=True, depth=default_depth) -> State:
         """
         return the nb of steps
         print the state if verbose
@@ -34,7 +33,7 @@ class ExpectimaxSearch(MiniMaxSearch):
 
         state = None
         while state is None or not state.success():
-            _, state = self.get_value(self.rushhour.state, depth=1)
+            _, state = self.get_value(self.rushhour.state, depth=depth)
 
         if verbose:
             self.rushhour.print_grid()
@@ -58,7 +57,7 @@ class ExpectimaxSearch(MiniMaxSearch):
 
     def get_max_value(self, state: State, depth) -> (int, State):
         child_states = self.rushhour.get_possible_moves(state=state)
-        v = math.inf
+        v = -math.inf
         best_state = child_states[0]
         for successor_state in child_states:
             local_v, local_state = self.get_value(successor_state, depth)
@@ -78,11 +77,13 @@ class ExpectimaxSearch(MiniMaxSearch):
         return v, child_states[0]
 
     def get_state_utility(self, state):
-        return state.score_heuristic_1(self.visited,
-                                       self.rushhour.free_pos,
-                                       self.rushhour.length,
-                                       self.rushhour.move_on,
-                                       self.rushhour.horiz)
+        utility = sum([state.score_heuristic_1(self.visited,
+                                               self.rushhour.free_pos,
+                                               self.rushhour.length,
+                                               self.rushhour.move_on,
+                                               self.rushhour.horiz)
+                       for state in self.state_history])
+        return utility
 
     @staticmethod
     def probability(state: State):

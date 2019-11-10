@@ -74,7 +74,7 @@ class RushHour:
         grid = self.get_formatted_grid_and_update_free_pos(state)
         print(grid)
 
-    def get_formatted_grid_and_update_free_pos(self, state) -> List:
+    def get_formatted_grid_and_update_free_pos(self, state) -> np.ndarray:
         self.update_free_pos()
         grid = np.chararray((6, 6))
         grid[:] = '-'
