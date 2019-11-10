@@ -29,36 +29,51 @@ class ExpectimaxSearch(MiniMaxSearch):
         print the state if verbose
         """
         _, final_state = self.get_value(self.rushhour.state)
+        self.rushhour.state = final_state
+        self.rushhour.plot_free_pos()
         if verbose:
             pass
         return final_state.nb_moves
 
-    def get_value(self, state) -> (int, State):
-        if state.success():
-            return DONT_CARE, state
+    def get_value(self, state, depth=1) -> (int, State):
+        if state.success() or depth == 0:
+            return self.get_state_utility(state), state
 
         agent = next(self.agent)
         if agent == Agent.MAX:
-            return self.get_max_value(state)
+            return self.get_max_value(state, depth - 1)
         elif agent == Agent.EXP:
-            return self.get_exp_value(state)
+            # TODO : UNMOCK
+            return self.get_exp_value(state, depth - 1)
 
-    def get_max_value(self, state: State) -> (int, State):
+    def get_max_value(self, state: State, depth) -> (int, State):
         child_states = self.rushhour.get_possible_moves(state=state)
         v = math.inf
         best_state = child_states[0]
         for successor_state in child_states:
-            local_v, local_state = self.get_value(successor_state)
+            local_v, local_state = self.get_value(successor_state, depth)
             if local_v > v:
                 v = local_v
                 best_state = successor_state
 
         return v, best_state
 
-    def get_exp_value(self, state: State) -> (int, State):
+    def get_exp_value(self, state: State, depth) -> (int, State):
         child_states = self.rushhour.get_possible_moves(state=state)
-        # TODO : UNMOCK
-        return 1, child_states[0]
+        v = 0
+        for successor in child_states:
+            p = ExpectimaxSearch.probability(successor)
+            v += p * self.get_value(successor, depth - 1)
+        return v,
 
-    def decide_best_move_expectimax(self, is_max):
-        pass
+    def get_state_utility(self, state):
+        return state.score_heuristic_1(self.visited,
+                                       self.rushhour.free_pos,
+                                       self.rushhour.length,
+                                       self.rushhour.move_on,
+                                       self.rushhour.horiz)
+
+    @staticmethod
+    def probability(state: State):
+        # TODO : UNMOCK
+        return 1

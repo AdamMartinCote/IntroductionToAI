@@ -152,7 +152,7 @@ class State:
         return feeling
 
     def score_heuristic_1(self, visited, free_pos: np.ndarray, length: List[int], move_on: List[int],
-                          is_horizontal: List[int]):
+                          is_horizontal: List[int]) -> int:
         nothing = 0
 
         impediment_penalty = 5
@@ -187,6 +187,7 @@ class State:
         gain += win_gain if self.success() else nothing
 
         self.score = gain - penalty
+        return self.score
 
     def success(self):
         return self.pos[0] == 4
