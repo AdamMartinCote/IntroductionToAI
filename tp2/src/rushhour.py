@@ -1,5 +1,6 @@
 from typing import List
 
+import matplotlib.pyplot as plt
 import numpy as np
 
 from tp2.src.state import State
@@ -88,6 +89,9 @@ class RushHour:
         return grid
 
     def plot_free_pos(self):
-        import matplotlib.pyplot as plt
         plt.imshow(self.free_pos)
+        plt.show()
+
+    def print_grid(self, state) -> None:
+        plt.imshow(self.get_formatted_grid_and_update_free_pos(state))
         plt.show()

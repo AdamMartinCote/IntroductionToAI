@@ -1,5 +1,6 @@
 import math
 from enum import Enum
+from typing import List
 
 from tp2.src.minmaxsearch import MiniMaxSearch
 from tp2.src.state import State
@@ -21,6 +22,7 @@ def get_next_agent_generator():
 class ExpectimaxSearch(MiniMaxSearch):
     def __init__(self, *arg, **kwargs):
         self.agent = get_next_agent_generator()
+        self.state_history: List[State] = []
         super().__init__(*arg, **kwargs)
 
     def solve_single_player(self, verbose=True) -> State:
@@ -28,11 +30,14 @@ class ExpectimaxSearch(MiniMaxSearch):
         return the nb of steps
         print the state if verbose
         """
-        _, final_state = self.get_value(self.rushhour.state, depth=3)
+
+        state = None
+        while state is None or not state.success():
+            _, state = self.get_value(self.rushhour.state, depth=1)
 
         if verbose:
-            pass
-        return final_state.nb_moves
+            self.rushhour.print_grid()
+        return state.nb_moves
 
     def get_value(self, state, depth=1) -> (int, State):
         if state.success() or depth == 0:

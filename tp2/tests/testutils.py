@@ -16,6 +16,3 @@ class TestUtils(TestCase):
         algo = MiniMaxSearch(rh, s, 1)
         self.assertEqual(algo.str_move(True, s), 'Voiture rouge vers la droite')
         self.assertEqual(algo.str_move(False, s), 'Roche dans la case 3-1')
-
-
-
