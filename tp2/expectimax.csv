@@ -1,4 +1,6 @@
 test_name,time (ms)
-test_expectimax_1,1650.92
-test_expectimax_2,3498.33
-test_expectimax_3,1172.82
+test_expectimax_1,3671.13
+test_expectimax_2,5164.20
+test_expectimax_3,2950.58
+test_expectimax_optimistic_1,2001.20
+test_expectimax_optimistic_2,10018.61
