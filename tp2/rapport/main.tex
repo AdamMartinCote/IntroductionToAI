@@ -8,6 +8,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{times} % Uncomment to use the Times New Roman font
 \usepackage{listings}
+\usepackage{booktabs}
 
 \setlength\parindent{0pt} % Removes all indentation from paragraphs
 
@@ -17,24 +18,35 @@
 
     \section{Implémentation de base}
 
-    Les fonctionnalités de base du jeu sont testés dans le cas de test "RushHour"
+    Execution des test:
     \texttt{python3 -m unittest tp2/tests/testrushhour.py}
 
     \section{Implémentation d'une recherche minimax}
 
     \subsection{simple}
 
+    Execution des test:
     \texttt{python3 -m unittest tp2/tests/testminimaxsingleplayer.py}
 
     \subsection{adversarielle}
 
+    Execution des test:
     \texttt{python3 -m unittest tp2/tests/testminimaxtwoplayers.py}
 
     \section{élagage $\alpha-\beta$}
-    \section{Implémentation d'une recherche minimax}
 
-    \subsection{Résultats}
+    Execution des test:
+    \texttt{python3 -m unittest tp2/tests/testpruning.py}
+
+    \input{pruningtable}
+
+    \section{Expectimax}
+
+    Execution des test:
+    \texttt{python3 -m unittest tp2/tests/testexpectimax.py}
+
+    \input{expectimaxtable}
+
     \subsection{Comparaison}
-
 
 \end{document}
