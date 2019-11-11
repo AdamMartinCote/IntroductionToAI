@@ -21,4 +21,4 @@ class Heuristics:
         # print(red_car_line)
         # print(path)
         # print(nb_blocking)
-        return nb_blocking
+        return -nb_blocking
