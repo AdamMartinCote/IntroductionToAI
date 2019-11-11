@@ -18,7 +18,7 @@ class Heuristics:
                 path.append(red_car_line[idx])
 
         nb_blocking = sum([1 if square is not b'-' else 0 for square in path])
-        print(red_car_line)
-        print(path)
-        print(nb_blocking)
+        # print(red_car_line)
+        # print(path)
+        # print(nb_blocking)
         return nb_blocking

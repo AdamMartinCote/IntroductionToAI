@@ -2,6 +2,7 @@ import math
 from enum import Enum
 from typing import List
 
+from tp2.src.heuristics import Heuristics
 from tp2.src.minmaxsearch import MiniMaxSearch
 from tp2.src.state import State
 
@@ -46,7 +47,7 @@ class ExpectimaxSearch(MiniMaxSearch):
             # self.rushhour.update_free_pos()
             # self.rushhour.plot_free_pos()
             self.state_history.append(state)
-            return self.get_state_utility(state), state
+            return self.get_state_utility_2(state), state
 
         agent = next(self.agent)
         if agent == Agent.MAX:
@@ -84,6 +85,10 @@ class ExpectimaxSearch(MiniMaxSearch):
                                                self.rushhour.horiz)
                        for state in self.state_history])
         return utility
+
+    def get_state_utility_2(self, state):
+        heuristic = Heuristics(self.rushhour)
+        return heuristic.blocking(state)
 
     @staticmethod
     def probability(state: State):
