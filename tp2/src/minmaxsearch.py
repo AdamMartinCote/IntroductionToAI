@@ -250,7 +250,8 @@ class MiniMaxSearch:
             tmp_states.append(tmp_state)
 
         scores = [t_s.score + current_score for t_s in tmp_states]
-        ps = [1-(score / sum(scores)) for score in scores]
+        sum_score = sum(scores)
+        ps = [1-(score / sum_score) for score in scores]
 
         for p, score in zip(ps, scores):
             current_state.score += score * p
@@ -286,7 +287,8 @@ class MiniMaxSearch:
             tmp_states.append(tmp_state)
 
         scores = [t_s.score + current_score for t_s in tmp_states]
-        ps = [score / sum(scores) for score in scores]
+        sum_score = sum(scores)
+        ps = [score / sum_score for score in scores]
 
         for p, score in zip(ps, scores):
             current_state.score += score * p

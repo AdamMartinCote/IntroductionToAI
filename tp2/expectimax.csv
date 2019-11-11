@@ -1,6 +1,10 @@
-test_name,time (ms)
-test_expectimax_1,3671.13
-test_expectimax_2,5164.20
-test_expectimax_3,2950.58
-test_expectimax_optimistic_1,2001.20
-test_expectimax_optimistic_2,10018.61
+test_name,time (ms),coups
+test_expectimax_1,1886.22,12
+test_expectimax_2,8386.26,80
+test_expectimax_3,2524.92,40
+test_expectimax_optimistic_1,2696.36,19
+test_expectimax_optimistic_2,12540.77,125
+test_expectimax_optimistic_3,1183.11,14
+test_expectimax_pessimistic_1,3736.95,26
+test_expectimax_pessimistic_2,12692.28,129
+test_expectimax_pessimistic_3,1089.85,16

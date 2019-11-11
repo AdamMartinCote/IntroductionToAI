@@ -12,7 +12,7 @@ class TestExpectimax(unittest.TestCase):
 
     @classmethod
     def setUpClass(self) -> None:
-        self.table_maker = TableMaker(file_name='expectimax.csv', header=['test_name', 'time (ms)'])
+        self.table_maker = TableMaker(file_name='expectimax.csv', header=['test_name', 'time (ms)', 'coups'])
 
     def execute_expectimax(self, test_name, is_pessimistic=False, is_optimistic=False):
         rush_hour: RushHour = RushHour(*self.rush_hour_data)
@@ -22,7 +22,7 @@ class TestExpectimax(unittest.TestCase):
         start = time()
         algo.solve_expectimax(verbose=False, is_pessimistic=is_pessimistic, is_optimistic=is_optimistic)
         duration = (time() - start) * 1000
-        self.table_maker.append_row([test_name, f'{duration:.2f}'])
+        self.table_maker.append_row([test_name, f'{duration:.2f}', rush_hour.state.nb_moves])
         print(rush_hour.state.nb_moves)
 
 
