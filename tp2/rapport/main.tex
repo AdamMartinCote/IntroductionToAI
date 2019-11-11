@@ -19,6 +19,7 @@
     \section{Implémentation de base}
 
     Execution des test:
+
     \texttt{python3 -m unittest tp2/tests/testrushhour.py}
 
     \section{Implémentation d'une recherche minimax}
@@ -26,12 +27,19 @@
     \subsection{simple}
 
     Execution des test:
+
     \texttt{python3 -m unittest tp2/tests/testminimaxsingleplayer.py}
 
     \subsection{adversarielle}
 
     Execution des test:
+
     \texttt{python3 -m unittest tp2/tests/testminimaxtwoplayers.py}
+
+    \vspace{0.5cm}
+
+    L'exécution des tests génère un fichier csv pour les algorithmes Minimax, Expectimax et Élagage.
+    Les résultats sont reproduit dans les tableaux suivants
 
     \subsection{Résultats}
 
@@ -55,7 +63,11 @@
 
     \section{Comparaison}
 
-    L'élagage augmente la performance de façon considérable.
-
+    On remarque que la performance avec Minimax semble plus stable d'un execution à l'autre, par rapport à Expectimax.
+    Avec Expectimax,l'adversaire arrive dans certains cas à augmenter grandement le nombre de coups nécesaire à la résolution de la partie,
+    par exemple, c'est le cas de «~test\_expectimax\_optimistic\_2~», ou le nombre de coups est de 125 et le temps d'exécution
+    augmenté proportionnellement.
+    Pour ce qui est du seuil de vicoire, on peut le fixer à une valeur equivalente à 3 fois la valeur qu'on aurait obtenu au TP 1.
+    Lorsque le nombre de coup nécessaires est augmenté par un facteur de 3, on évalue que l'adversaire a bien travaillé.
 
 \end{document}
