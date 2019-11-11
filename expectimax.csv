@@ -1,8 +1,0 @@
-test_name,time (ms),coups
-test_expectimax_1,4499.11,31
-test_expectimax_2,4740.73,47
-test_expectimax_3,1005.18,14
-test_expectimax_optimistic_1,2263.81,13
-test_expectimax_optimistic_2,3494.47,35
-test_expectimax_optimistic_3,1467.57,20
-test_expectimax_pessimistic_1,1908.38,12
