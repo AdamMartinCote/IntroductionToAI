@@ -164,9 +164,40 @@ class MiniMaxSearch:
 
         return best_state if current_depth is 0 else current_state
 
+    def exp_value(self, current_depth, current_state):
+
+        self.rushhour.state = current_state
+
+        possible_states = self.rushhour.possible_rock_moves()
+        p = 1 / len(possible_states)
+        current_state.score_heuristic_1(self.visited, self.rushhour.free_pos, self.rushhour.length,
+                                        self.rushhour.move_on, self.rushhour.horiz)
+
+        current_score = current_state.score
+
+        if current_depth is self.search_depth or current_state.success():
+            return current_state
+
+        current_state.score = 0
+
+        for possible_state in possible_states:
+            possible_state.previous_state = None
+            possible_state.nb_moves -= 1  # because it adds one in get_possible_moves
+            tmp_state = self.max_value(current_depth + 1, possible_state)
+            current_state.score += current_score + tmp_state.score * p
+        import random
+        random_index = random.randrange(len(possible_states))
+        random_state = possible_states[random_index]
+
+        return random_state if current_depth is 0 else current_state
+
     def minimax_pruning(self, current_depth, current_state, is_max, alpha, beta):
         return self.max_pruning(current_depth, current_state, alpha, beta) if is_max \
             else self.min_pruning(current_depth, current_state, alpha, beta)
+
+    def expectimax(self, current_depth, current_state, is_max):
+        return self.max_value(current_depth, current_state) if is_max \
+            else self.exp_value(current_depth, current_state)
 
     def decide_best_move_1(self):
         """
@@ -216,6 +247,22 @@ class MiniMaxSearch:
             else:
                 self.visited[hash(init_state)] += 1
 
+    def decide_best_move_expectimax(self, is_max):
+        init_state = self.rushhour.state
+        best_move = self.expectimax(0, self.rushhour.state, is_max)
+        self.rushhour.state = init_state
+        self.rushhour.update_free_pos()
+
+        if is_max:
+            self.rushhour.state = init_state.move(best_move.index_of_last_moved_car,
+                                                  best_move.last_move_direction)
+        else:
+            self.rushhour.state = init_state.put_rock(best_move.rock)
+            if hash(init_state) not in self.visited:
+                self.visited[hash(init_state)] = 1
+            else:
+                self.visited[hash(init_state)] += 1
+
     def solve_single_player(self, verbose=True) -> None:
         while not self.rushhour.state.success():
             self.decide_best_move_1()
@@ -240,6 +287,18 @@ class MiniMaxSearch:
         is_max = True
         while not self.rushhour.state.success():
             self.decide_best_move_pruning(is_max)
+            s = self.str_move(is_max, self.rushhour.state)
+
+            is_max = not is_max
+
+            if verbose:
+                self.rushhour.plot_free_pos()
+                print(s)
+
+    def solve_expectimax(self, verbose=True):
+        is_max = True
+        while not self.rushhour.state.success():
+            self.decide_best_move_expectimax(is_max)
             s = self.str_move(is_max, self.rushhour.state)
 
             is_max = not is_max
