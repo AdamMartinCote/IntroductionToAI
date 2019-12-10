@@ -36,17 +36,19 @@ class SoftmaxClassifier(BaseEstimator, ClassifierMixin):
             self, in sklearn the fit method returns the object itself
         """
 
-        dim_y = X.shape[0]
-        dim_x = X.shape[1]
+        m = X.shape[0]
+        n = X.shape[1]
+        k = 6  # TODO ??
+
+        X_bias = np.zeros(shape=(m, n + 1))
+        X_bias[:, :1] = 1
+
+        theta_weight_matrix = np.random.rand(n + 1, k)
 
         prev_loss = np.inf
         self.losses_ = []
 
-        # self.nb_feature =
-        # self.nb_classes =
-
-        # X_bias =
-        self.theta_weight_matrix = np.zeros(shape=(1, 1), dtype=np.float32)
+        self.nb_features = n
 
         for epoch in range(self.n_epochs):
 
@@ -54,7 +56,7 @@ class SoftmaxClassifier(BaseEstimator, ClassifierMixin):
             # probabilities =
 
             # loss =
-            # self.theta_ =
+            # self.theta_weight_matrix =
 
             if self.early_stopping:
                 pass
@@ -63,15 +65,17 @@ class SoftmaxClassifier(BaseEstimator, ClassifierMixin):
 
     def predict_proba(self, X, y=None):
         try:
-            getattr(self, "theta_")
+            getattr(self, "theta_weight_matrix")
         except AttributeError:
             raise RuntimeError("You must train classifer before predicting data!")
-        # X_bias =
-        pass
+
+        m = X.shape[0]
+        n = X.shape[1]
+        X_bias = np.zeros(shape=(m, n + 1))
 
     def predict(self, X, y=None):
         try:
-            getattr(self, "theta_")
+            getattr(self, "theta_weight_matrix")
         except AttributeError:
             raise RuntimeError("You must train classifer before predicting data!")
         pass
