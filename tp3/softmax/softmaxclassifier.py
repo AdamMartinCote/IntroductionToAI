@@ -5,6 +5,7 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 class SoftmaxClassifier(BaseEstimator, ClassifierMixin):
     nb_classes: int
     nb_features: int
+    nb_examples: int
 
     def __init__(self, lr=0.1, alpha=100, n_epochs=1000, eps=1.0e-5, threshold=1.0e-10, early_stopping=True):
 
@@ -36,14 +37,14 @@ class SoftmaxClassifier(BaseEstimator, ClassifierMixin):
             self, in sklearn the fit method returns the object itself
         """
 
-        m = X.shape[0]
-        n = X.shape[1]
-        k = self.nb_features
+        m = self.nb_examples = X.shape[0]
+        n = self.nb_features = X.shape[1]
+        k = self.nb_classes = len(set(y))
 
         X_bias = np.zeros(shape=(m, n + 1))
         X_bias[:, :1] = 1
 
-        self.theta_weight_matrix = np.random.rand(n + 1, k)
+        self.theta_weight_matrix = np.random.rand(n + 1, k) / 100
 
         prev_loss = np.inf
         self.losses_ = []
@@ -53,7 +54,7 @@ class SoftmaxClassifier(BaseEstimator, ClassifierMixin):
         for epoch in range(self.n_epochs):
 
             # logits =
-            probabilities = self.predict_proba(X_bias, y)
+            probabilities = self.predict_proba(X, y)
 
             loss = self._cost_function(probabilities, y)
             self.theta_weight_matrix -= self.learning_rhythm * self._get_gradient(X_bias, y, probabilities)
@@ -73,7 +74,6 @@ class SoftmaxClassifier(BaseEstimator, ClassifierMixin):
 
         m = X.shape[0]
         n = X.shape[1]
-        # X_bias = np.zeros(shape=(m, n + 1))
 
         X_bias = np.concatenate((np.ones((m, 1), dtype=float), X), axis=1)
         Z = X_bias @ self.theta_weight_matrix
