@@ -41,8 +41,7 @@ class SoftmaxClassifier(BaseEstimator, ClassifierMixin):
         n = self.nb_features = X.shape[1]
         k = self.nb_classes = len(set(y))
 
-        X_bias = np.zeros(shape=(m, n + 1))
-        X_bias[:, :1] = 1
+        X_bias = np.concatenate((np.ones((X.shape[0], 1), dtype=float), X), axis=1)
 
         self.theta_weight_matrix = np.random.rand(n + 1, k) / 100
 
@@ -75,7 +74,7 @@ class SoftmaxClassifier(BaseEstimator, ClassifierMixin):
         m = X.shape[0]
         n = X.shape[1]
 
-        X_bias = np.concatenate((np.ones((m, 1), dtype=float), X), axis=1)
+        X_bias = np.concatenate((np.ones((X.shape[0], 1), dtype=float), X), axis=1)
         Z = X_bias @ self.theta_weight_matrix
         return np.array([self._softmax(z) for z in Z])
 
