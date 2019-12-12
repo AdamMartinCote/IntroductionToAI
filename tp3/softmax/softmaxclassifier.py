@@ -38,12 +38,12 @@ class SoftmaxClassifier(BaseEstimator, ClassifierMixin):
 
         m = X.shape[0]
         n = X.shape[1]
-        k = 6  # TODO ??
+        k = self.nb_features
 
         X_bias = np.zeros(shape=(m, n + 1))
         X_bias[:, :1] = 1
 
-        theta_weight_matrix = np.random.rand(n + 1, k)
+        self.theta_weight_matrix = np.random.rand(n + 1, k)
 
         prev_loss = np.inf
         self.losses_ = []
@@ -53,13 +53,15 @@ class SoftmaxClassifier(BaseEstimator, ClassifierMixin):
         for epoch in range(self.n_epochs):
 
             # logits =
-            # probabilities =
+            probabilities = self.predict_proba(X_bias, y)
 
-            # loss =
-            # self.theta_weight_matrix =
+            loss = self._cost_function(probabilities, y)
+            self.theta_weight_matrix -= self.learning_rhythm * self._get_gradient(X_bias, y, probabilities)
 
             if self.early_stopping:
-                pass
+                if np.abs(prev_loss - loss) < self.threshold:
+                    break
+                prev_loss = loss
 
         return self
 
@@ -71,36 +73,47 @@ class SoftmaxClassifier(BaseEstimator, ClassifierMixin):
 
         m = X.shape[0]
         n = X.shape[1]
-        X_bias = np.zeros(shape=(m, n + 1))
+        # X_bias = np.zeros(shape=(m, n + 1))
+
+        X_bias = np.concatenate((np.ones((m, 1), dtype=float), X), axis=1)
+        Z = X_bias @ self.theta_weight_matrix
+        return np.array([self._softmax(z) for z in Z])
 
     def predict(self, X, y=None):
         try:
             getattr(self, "theta_weight_matrix")
         except AttributeError:
             raise RuntimeError("You must train classifer before predicting data!")
-        pass
+        P = self.predict_proba(X, y)
+        return [np.argmax(p) for p in P]
 
     def fit_predict(self, X, y=None):
         self.fit(X, y)
         return self.predict(X, y)
 
-    def score(self, X, y=None, sample_weight=None):
-        pass
+    def score(self, X, y=None, sample_weight=None) -> float:
+        prob = self.predict_proba(X, y)
+        return self._cost_function(prob, y)
 
     def _cost_function(self, probabilities, y):
-        pass
+        encoded_y = self._one_hot(y)
+        P_mat = np.clip(probabilities, self.eps, 1 - self.eps)
+
+        return (-1.0) / len(y) * np.sum(encoded_y * np.log(P_mat))
 
     def _one_hot(self, y) -> np.array:
-        dim = len(y)
-        mat = np.zeros(shape=(dim, self.nb_classes))
-        for idx, value in enumerate(y):
-            mat[idx][value] = 1
-
-        return mat
+        size = (len(y), self.nb_classes)
+        ret = np.zeros(size, dtype=float)
+        for i in range(len(y)):
+            ret[i][y[i]] = 1.0
+        return ret
 
     def _softmax(self, z):
-        pass
+        z_exp = [np.exp(z_j) for z_j in z]
+        z_exp_sum = np.sum(z_exp)
+        return [z_exp[i] / z_exp_sum for i in range(len(z_exp))]
 
     def _get_gradient(self, X_bias, y, probas):
-
-        pass
+        m = len(y)
+        y_ohe = self._one_hot(y)
+        return (1 / m) * X_bias.T @ (probas - y_ohe)
